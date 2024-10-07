@@ -671,7 +671,6 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        hls = {},
         -- clangd = {},
         -- gopls = {},
         -- pyright = {},
@@ -700,6 +699,10 @@ require('lazy').setup({
           },
         },
       }
+
+      if vim.loop.os_uname().sysname == 'Linux' then
+        servers['hls'] = {}
+      end
 
       -- Ensure the servers and tools above are installed
       --
@@ -952,7 +955,7 @@ require('lazy').setup({
       -- cursor location to LINE:COLUMN
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_location = function()
-        return '%2l:%-2v'
+        return '%2l:%-2v %3p%%'
       end
 
       -- ... and there is more!
