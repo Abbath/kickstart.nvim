@@ -193,9 +193,6 @@ vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
 vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
 vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 
-vim.keymap.set('n', ']g', vim.diagnostic.goto_next)
-vim.keymap.set('n', '[g', vim.diagnostic.goto_prev)
-
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
 --
@@ -829,29 +826,29 @@ require('lazy').setup({
       'hrsh7th/cmp-nvim-lsp-signature-help',
     },
     {
-      "johmsalas/text-case.nvim",
-      dependencies = { "nvim-telescope/telescope.nvim" },
+      'johmsalas/text-case.nvim',
+      dependencies = { 'nvim-telescope/telescope.nvim' },
       config = function()
-        require("textcase").setup({})
-        require("telescope").load_extension("textcase")
+        require('textcase').setup {}
+        require('telescope').load_extension 'textcase'
       end,
       keys = {
-        "ga", -- Default invocation prefix
-        { "ga.", "<cmd>TextCaseOpenTelescope<CR>", mode = { "n", "x" }, desc = "Telescope" },
+        'ga', -- Default invocation prefix
+        { 'ga.', '<cmd>TextCaseOpenTelescope<CR>', mode = { 'n', 'x' }, desc = 'Telescope' },
       },
       cmd = {
         -- NOTE: The Subs command name can be customized via the option "substitude_command_name"
-        "Subs",
-        "TextCaseOpenTelescope",
-        "TextCaseOpenTelescopeQuickChange",
-        "TextCaseOpenTelescopeLSPChange",
-        "TextCaseStartReplacingCommand",
+        'Subs',
+        'TextCaseOpenTelescope',
+        'TextCaseOpenTelescopeQuickChange',
+        'TextCaseOpenTelescopeLSPChange',
+        'TextCaseStartReplacingCommand',
       },
       -- If you want to use the interactive feature of the `Subs` command right away, text-case.nvim
       -- has to be loaded on startup. Otherwise, the interactive feature of the `Subs` will only be
       -- available after the first executing of it or after a keymap of text-case.nvim has been used.
       lazy = false,
-    }, 
+    },
     config = function()
       -- See `:help cmp`
       local cmp = require 'cmp'
