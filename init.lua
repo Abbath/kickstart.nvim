@@ -625,6 +625,7 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
+        clangd = {},
         -- gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
@@ -655,7 +656,6 @@ require('lazy').setup({
 
       if vim.loop.os_uname().sysname == 'Linux' then
         servers['hls'] = {}
-        servers['clangd'] = {}
       end
 
       -- Ensure the servers and tools above are installed
