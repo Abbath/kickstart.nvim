@@ -170,6 +170,16 @@ vim.opt.confirm = true
 
 vim.bo.softtabstop = 2
 
+if vim.loop.os_uname().sysname == 'Windows_NT' then
+  vim.opt.shell = 'pwsh'
+  vim.opt.shellcmdflag =
+    "-NoLogo -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;$PSStyle.Formatting.Error = '';$PSStyle.Formatting.ErrorAccent = '';$PSStyle.Formatting.Warning = '';$PSStyle.OutputRendering = 'PlainText';"
+  vim.opt.shellredir = '2>&1 | %%{ "$_" } | Out-File %s; exit $LastExitCode'
+  vim.opt.shellpipe = '2>&1 | %%{ "$_" } | tee %s; exit $LastExitCode'
+  vim.opt.shellquote = ''
+  vim.opt.shellxquote = ''
+end
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -1058,7 +1068,25 @@ require('lazy').setup({
     end,
   },
 
-  -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
+  {
+    'numToStr/FTerm.nvim',
+    name = 'FTerm.LazyGit.nvim',
+    config = function()
+      local fterm = require 'FTerm'
+      local lazygit = fterm:new {
+        cmd = 'lazygit',
+      }
+
+      vim.keymap.set('n', '<leader>lg', function()
+        lazygit:toggle()
+      end, { desc = 'Toggle [L]azy[G]it' })
+      vim.keymap.set('t', '<leader>lg', function()
+        lazygit:toggle()
+      end, { desc = 'Toggle [L]azy[G]it' })
+    end,
+  },
+
+  -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
 
