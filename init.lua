@@ -164,6 +164,7 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
+vim.bo.tabstop = 2
 vim.bo.softtabstop = 2
 
 if vim.loop.os_uname().sysname == 'Windows_NT' then
@@ -635,6 +636,7 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         clangd = {},
+        pylsp = {},
         -- gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
