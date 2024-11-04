@@ -168,6 +168,7 @@ vim.opt.scrolloff = 10
 -- See `:help 'confirm'`
 vim.opt.confirm = true
 
+vim.bo.tabstop = 2
 vim.bo.softtabstop = 2
 
 if vim.loop.os_uname().sysname == 'Windows_NT' then
@@ -689,6 +690,7 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         clangd = {},
+        pylsp = {},
         -- gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
@@ -778,7 +780,6 @@ require('lazy').setup({
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
         local disable_filetypes = { c = true, cpp = true }
-
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
         else
