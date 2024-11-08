@@ -95,9 +95,9 @@ vim.g.have_nerd_font = true
 
 if vim.g.neovide then
   vim.o.guifont = 'FiraCode Nerd Font'
-  vim.g.neovide_position_animation_length = 0
-  vim.g.neovide_scroll_animation_length = 0
-  vim.g.neovide_cursor_animation_length = 0
+  -- vim.g.neovide_position_animation_length = 0
+  -- vim.g.neovide_scroll_animation_length = 0
+  -- vim.g.neovide_cursor_animation_length = 0
 end
 
 -- [[ Setting options ]]
@@ -1107,6 +1107,7 @@ require('lazy').setup({
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
+  --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
   -- { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
