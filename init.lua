@@ -986,6 +986,7 @@ require('lazy').setup({
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
+      require('mini.sessions').setup { autoread = true }
 
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
