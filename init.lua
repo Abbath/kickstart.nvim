@@ -98,6 +98,7 @@ if vim.g.neovide then
   -- vim.g.neovide_position_animation_length = 0
   -- vim.g.neovide_scroll_animation_length = 0
   vim.g.neovide_remember_window_size = true
+  vim.g.neovide_remember_window_position = true
   vim.g.neovide_cursor_animation_length = 0
 end
 
@@ -425,11 +426,16 @@ require('lazy').setup({
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
+        defaults = {
+          layout_strategy = 'vertical',
+          layout_config = {
+            vertical = { width = 0.9, height = 0.9 },
+            -- other layout configuration here
+          },
+          --   mappings = {
+          --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
+          --   },
+        },
         -- pickers = {}
         extensions = {
           ['ui-select'] = {
@@ -461,6 +467,10 @@ require('lazy').setup({
         builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
           winblend = 10,
           previewer = false,
+          layout_config = {
+            width = 0.9,
+            height = 0.9,
+          },
         })
       end, { desc = '[/] Fuzzily search in current buffer' })
 
