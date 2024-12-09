@@ -716,6 +716,7 @@ require('lazy').setup({
         clangd = {},
         pylsp = {},
         zls = {},
+        ols = {},
         -- gopls = {},
         -- pyright = {},
         rust_analyzer = {},
@@ -1104,6 +1105,10 @@ require('lazy').setup({
       local fterm = require 'FTerm'
       local lazygit = fterm:new {
         cmd = 'lazygit',
+        dimensions = {
+          height = 0.9,
+          width = 0.9,
+        },
       }
 
       vim.keymap.set('n', '<leader>lg', function()
