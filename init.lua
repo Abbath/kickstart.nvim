@@ -727,7 +727,7 @@ require('lazy').setup({
         clangd = {},
         pylsp = {},
         zls = {},
-        ols = {},
+        ols = { init_options = { enable_semantic_tokens = true } },
         -- gopls = {},
         -- pyright = {},
         rust_analyzer = {},
@@ -1127,6 +1127,25 @@ require('lazy').setup({
         lazygit:toggle()
       end, { desc = 'Toggle [L]azy[G]it' })
     end,
+  },
+  {
+    'mhanberg/output-panel.nvim',
+    version = '*',
+    event = 'VeryLazy',
+    config = function()
+      require('output_panel').setup {
+        max_buffer_size = 5000, -- default
+      }
+    end,
+    cmd = { 'OutputPanel' },
+    keys = {
+      {
+        '<leader>o',
+        vim.cmd.OutputPanel,
+        mode = 'n',
+        desc = 'Toggle the output panel',
+      },
+    },
   },
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
