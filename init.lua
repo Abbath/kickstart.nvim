@@ -725,7 +725,7 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         clangd = {},
-        pylsp = {},
+        pylsp = { settings = { pylsp = { plugins = { pycodestyle = { ignore = { 'E501' }, maxLineLength = 1000 } } } } },
         zls = {},
         ols = { init_options = { enable_semantic_tokens = true } },
         -- gopls = {},
