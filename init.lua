@@ -101,6 +101,7 @@ if vim.g.neovide then
   vim.g.neovide_remember_window_size = true
   vim.g.neovide_remember_window_position = true
   vim.g.neovide_cursor_animation_length = 0
+  vim.g.neovide_floating_corner_radius = 30
 end
 
 -- [[ Setting options ]]
@@ -146,6 +147,7 @@ vim.opt.signcolumn = 'yes'
 vim.opt.updatetime = 250
 
 -- Decrease mapped sequence wait time
+-- Displays which-key popup sooner
 vim.opt.timeoutlen = 300
 
 -- Configure how new splits should be opened
@@ -167,10 +169,14 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
+vim.o.fileformat = 'unix'
+vim.o.fileformats = 'unix,dos'
+
 vim.o.autoread = true
 
 vim.bo.tabstop = 2
 vim.bo.softtabstop = 2
+vim.bo.expandtab = true
 
 if vim.loop.os_uname().sysname == 'Windows_NT' then
   vim.opt.shell = 'pwsh'
@@ -302,16 +308,14 @@ require('lazy').setup({
   -- which loads which-key before all the UI elements are loaded. Events can be
   -- normal autocommands events (`:help autocmd-events`).
   --
-  -- Then, because we use the `opts` key (recommended), the configuration runs
-  -- after the plugin has been loaded as `require(MODULE).setup(opts)`.
+  -- Then, because we use the `config` key, the configuration only runs
+  -- after the plugin has been loaded:
+  --  config = function() ... end
 
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     opts = {
-      -- delay between pressing a key and opening which-key (milliseconds)
-      -- this setting is independent of vim.opt.timeoutlen
-      delay = 0,
       icons = {
         -- set icon mappings to true if you have a Nerd Font
         mappings = vim.g.have_nerd_font,
@@ -529,6 +533,7 @@ require('lazy').setup({
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
+
       { 'j-hui/fidget.nvim', opts = {} },
 
       -- Allows extra capabilities provided by nvim-cmp
@@ -717,7 +722,14 @@ require('lazy').setup({
         clangd = {},
         pylsp = { settings = { pylsp = { plugins = { pycodestyle = { ignore = { 'E501' }, maxLineLength = 1000 } } } } },
         zls = {},
-        ols = { init_options = { enable_semantic_tokens = true } },
+        ols = {},
+        hls = {
+          settings = {
+            haskell = {
+              formattingProvider = 'formolu',
+            },
+          },
+        },
         -- gopls = {},
         -- pyright = {},
         rust_analyzer = {},
@@ -731,8 +743,8 @@ require('lazy').setup({
         --
 
         lua_ls = {
-          -- cmd = { ... },
-          -- filetypes = { ... },
+          -- cmd = {...},
+          -- filetypes = { ...},
           -- capabilities = {},
           settings = {
             Lua = {
@@ -746,21 +758,14 @@ require('lazy').setup({
         },
       }
 
-      if vim.loop.os_uname().sysname == 'Linux' then
-        servers['hls'] = {}
-      end
-
       -- Ensure the servers and tools above are installed
-      --
-      -- To check the current status of installed tools and/or manually install
-      -- other tools, you can run
+      --  To check the current status of installed tools and/or manually install
+      --  other tools, you can run
       --    :Mason
       --
-      -- You can press `g?` for help in this menu.
-      --
-      -- `mason` had to be setup earlier: to configure its options see the
-      -- `dependencies` table for `nvim-lspconfig` above.
-      --
+      --  You can press `g?` for help in this menu.
+      require('mason').setup()
+
       -- You can add other tools here that you want Mason to install
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
@@ -1119,25 +1124,6 @@ require('lazy').setup({
         lazygit:toggle()
       end, { desc = 'Toggle [L]azy[G]it' })
     end,
-  },
-  {
-    'mhanberg/output-panel.nvim',
-    version = '*',
-    event = 'VeryLazy',
-    config = function()
-      require('output_panel').setup {
-        max_buffer_size = 5000, -- default
-      }
-    end,
-    cmd = { 'OutputPanel' },
-    keys = {
-      {
-        '<leader>o',
-        vim.cmd.OutputPanel,
-        mode = 'n',
-        desc = 'Toggle the output panel',
-      },
-    },
   },
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
