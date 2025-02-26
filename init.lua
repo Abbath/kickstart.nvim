@@ -101,6 +101,7 @@ if vim.g.neovide then
   vim.g.neovide_remember_window_size = true
   vim.g.neovide_remember_window_position = true
   vim.g.neovide_cursor_animation_length = 0
+  vim.g.neovide_floating_corner_radius = 30
 end
 
 -- [[ Setting options ]]
@@ -172,9 +173,14 @@ vim.opt.scrolloff = 10
 -- See `:help 'confirm'`
 vim.opt.confirm = true
 
+vim.o.fileformat = 'unix'
+vim.o.fileformats = 'unix,dos'
+
 vim.o.autoread = true
+
 vim.bo.tabstop = 2
 vim.bo.softtabstop = 2
+vim.bo.expandtab = true
 
 if vim.loop.os_uname().sysname == 'Windows_NT' then
   vim.opt.shell = 'pwsh'
@@ -727,7 +733,14 @@ require('lazy').setup({
         clangd = {},
         pylsp = { settings = { pylsp = { plugins = { pycodestyle = { ignore = { 'E501' }, maxLineLength = 1000 } } } } },
         zls = {},
-        ols = { init_options = { enable_semantic_tokens = true } },
+        ols = {},
+        hls = {
+          settings = {
+            haskell = {
+              formattingProvider = 'formolu',
+            },
+          },
+        },
         -- gopls = {},
         -- pyright = {},
         rust_analyzer = {},
@@ -755,10 +768,6 @@ require('lazy').setup({
           },
         },
       }
-
-      if vim.loop.os_uname().sysname == 'Linux' then
-        servers['hls'] = {}
-      end
 
       -- Ensure the servers and tools above are installed
       --
