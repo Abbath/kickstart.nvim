@@ -1115,7 +1115,6 @@ require('lazy').setup({
       }
     end,
   },
-
   {
     'numToStr/FTerm.nvim',
     name = 'FTerm.LazyGit.nvim',
@@ -1138,23 +1137,13 @@ require('lazy').setup({
     end,
   },
   {
-    'mhanberg/output-panel.nvim',
-    version = '*',
-    event = 'VeryLazy',
-    config = function()
-      require('output_panel').setup {
-        max_buffer_size = 5000, -- default
-      }
+    'lervag/vimtex',
+    lazy = false, -- we don't want to lazy load VimTeX
+    -- tag = "v2.15", -- uncomment to pin to a specific release
+    init = function()
+      -- VimTeX configuration goes here, e.g.
+      vim.g.vimtex_view_method = 'zathura'
     end,
-    cmd = { 'OutputPanel' },
-    keys = {
-      {
-        '<leader>o',
-        vim.cmd.OutputPanel,
-        mode = 'n',
-        desc = 'Toggle the output panel',
-      },
-    },
   },
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
