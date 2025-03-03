@@ -1072,6 +1072,9 @@ require('lazy').setup({
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
   {
+    'nvim-treesitter/nvim-treesitter-context',
+  },
+  {
     'smoka7/multicursors.nvim',
     event = 'VeryLazy',
     dependencies = {
