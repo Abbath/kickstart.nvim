@@ -102,6 +102,8 @@ if vim.g.neovide then
   vim.g.neovide_remember_window_position = true
   vim.g.neovide_cursor_animation_length = 0
   vim.g.neovide_floating_corner_radius = 30
+  vim.g.neovide_cursor_animate_in_insert_mode = true
+  vim.g.neovide_cursor_smooth_blink = true
 end
 
 -- [[ Setting options ]]
@@ -731,7 +733,7 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         clangd = {},
-        pylsp = { settings = { pylsp = { plugins = { pycodestyle = { ignore = { 'E501' }, maxLineLength = 1000 } } } } },
+        ruff = {},
         zls = {},
         ols = {},
         hls = {
