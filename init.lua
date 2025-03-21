@@ -1121,25 +1121,24 @@ require('lazy').setup({
     end,
   },
   {
-    'numToStr/FTerm.nvim',
-    name = 'FTerm.LazyGit.nvim',
-    config = function()
-      local fterm = require 'FTerm'
-      local lazygit = fterm:new {
-        cmd = 'lazygit',
-        dimensions = {
-          height = 0.9,
-          width = 0.9,
-        },
-      }
-
-      vim.keymap.set('n', '<leader>lg', function()
-        lazygit:toggle()
-      end, { desc = 'Toggle [L]azy[G]it' })
-      vim.keymap.set('t', '<leader>lg', function()
-        lazygit:toggle()
-      end, { desc = 'Toggle [L]azy[G]it' })
-    end,
+    'folke/snacks.nvim',
+    keys = {
+      {
+        '<leader>lg',
+        function()
+          Snacks.lazygit()
+        end,
+        desc = 'Open Lazygit',
+      },
+    },
+    ---@type snacks.Config
+    opts = {
+      lazygit = {
+        -- your lazygit configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      },
+    },
   },
   {
     'lervag/vimtex',
