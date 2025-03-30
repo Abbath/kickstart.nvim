@@ -833,7 +833,7 @@ require('lazy').setup({
         else
           return {
             timeout_ms = 500,
-            lsp_format = lsp_format_opt,
+            lsp_format = 'fallback',
           }
         end
       end,
