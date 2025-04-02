@@ -1083,44 +1083,6 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter-context',
   },
   {
-    'smoka7/multicursors.nvim',
-    event = 'VeryLazy',
-    dependencies = {
-      'nvimtools/hydra.nvim',
-    },
-    opts = {},
-    cmd = { 'MCstart', 'MCvisual', 'MCclear', 'MCpattern', 'MCvisualPattern', 'MCunderCursor' },
-    keys = {
-      {
-        mode = { 'v', 'n' },
-        '<Leader>m',
-        '<cmd>MCstart<cr>',
-        desc = 'Create a selection for selected text or word under the cursor',
-      },
-    },
-  },
-  {
-    'ej-shafran/compile-mode.nvim',
-    -- tag = 'v5.*',
-    -- you can just use the latest version:
-    branch = 'latest',
-    -- or the most up-to-date updates:
-    -- branch = "nightly",
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      -- if you want to enable coloring of ANSI escape codes in
-      -- compilation output, add:
-      -- { "m00qek/baleia.nvim", tag = "v1.3.0" },
-    },
-    config = function()
-      ---@type CompileModeOpts
-      vim.g.compile_mode = {
-        -- to add ANSI escape code support, add:
-        -- baleia_setup = true,
-      }
-    end,
-  },
-  {
     'folke/snacks.nvim',
     keys = {
       {
