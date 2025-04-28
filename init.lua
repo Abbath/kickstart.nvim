@@ -744,7 +744,7 @@ require('lazy').setup({
         hls = {
           settings = {
             haskell = {
-              formattingProvider = 'formolu',
+              formattingProvider = 'fourmolu',
             },
           },
         },
