@@ -759,6 +759,7 @@ require('lazy').setup({
         -- gopls = {},
         -- pyright = {},
         rust_analyzer = {},
+        tinymist = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -1161,6 +1162,7 @@ require('lazy').setup({
       vim.g.vimtex_view_method = 'zathura'
     end,
   },
+  { 'HiPhish/rainbow-delimiters.nvim' },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
