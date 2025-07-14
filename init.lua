@@ -184,9 +184,9 @@ vim.o.fileformats = 'unix,dos'
 
 vim.o.autoread = true
 
-vim.bo.tabstop = 2
-vim.bo.softtabstop = 2
-vim.bo.expandtab = true
+vim.o.tabstop = 2
+vim.o.softtabstop = 2
+vim.o.expandtab = true
 
 if vim.loop.os_uname().sysname == 'Windows_NT' then
   vim.o.shell = 'pwsh'
