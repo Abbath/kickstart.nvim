@@ -1083,13 +1083,13 @@ require('lazy').setup({
       end, { desc = 'Skip cursor DOWN' })
 
       -- Add or skip adding a new cursor by matching word/selection
-      set({ 'n', 'x' }, '<leader>mn', function()
+      set({ 'n', 'x' }, '<leader>n', function()
         mc.matchAddCursor(1)
       end, { desc = 'Match add cursor DOWN' })
-      set({ 'n', 'x' }, '<leader>ms', function()
+      set({ 'n', 'x' }, '<leader>N', function()
         mc.matchSkipCursor(1)
       end, { desc = 'Match skip cursor DOWN' })
-      set({ 'n', 'x' }, '<leader>mN', function()
+      set({ 'n', 'x' }, '<leader>ms', function()
         mc.matchAddCursor(-1)
       end, { desc = 'Match add cursor UP' })
       set({ 'n', 'x' }, '<leader>mS', function()
