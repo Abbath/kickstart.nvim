@@ -412,7 +412,10 @@ require('lazy').setup({
       { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
     },
     opts = {
-      picker = { layout = { preset = 'vertical', layout = { width = 0.9, height = 0.9 } } },
+      picker = {
+        matcher = { cwd_bonus = true, frecency = true, history_bonus = true },
+        layout = { preset = 'vertical', layout = { width = 0.9, height = 0.9 } },
+      },
       lazygit = {},
       indent = { animate = { enabled = false } },
     },
