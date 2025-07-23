@@ -628,15 +628,6 @@ require('lazy').setup({
           --  the definition of its *type*, not where it was *defined*.
           map('grt', require('snacks').picker.lsp_type_definitions, '[G]oto [T]ype Definition')
 
-          -- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
-          ---@param client vim.lsp.Client
-          ---@param method vim.lsp.protocol.Method
-          ---@param bufnr? integer some lsp support methods only in specific files
-          ---@return boolean
-          local function client_supports_method(client, method, bufnr)
-            return client:supports_method(method, bufnr)
-          end
-
           map('<leader>td', function()
             vim.diagnostic.enable(not vim.diagnostic.is_enabled())
           end, '[T]oggle [D]iagnostics')
