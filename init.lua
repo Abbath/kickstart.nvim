@@ -187,6 +187,7 @@ vim.o.autoread = true
 vim.o.tabstop = 2
 vim.o.softtabstop = 2
 vim.o.expandtab = true
+vim.o.smoothscroll = true
 
 if vim.loop.os_uname().sysname == 'Windows_NT' then
   vim.o.shell = 'pwsh'
@@ -411,8 +412,9 @@ require('lazy').setup({
       { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
     },
     opts = {
-      picker = {},
+      picker = { layout = { preset = 'vertical', layout = { width = 0.9, height = 0.9 } } },
       lazygit = {},
+      indent = { animate = { enabled = false } },
     },
     keys = {
       {
@@ -1170,7 +1172,7 @@ require('lazy').setup({
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
   -- require 'kickstart.plugins.debug',
-  require 'kickstart.plugins.indent_line',
+  -- require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
