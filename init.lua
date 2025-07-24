@@ -415,11 +415,24 @@ require('lazy').setup({
       picker = {
         matcher = { cwd_bonus = true, frecency = true, history_bonus = true },
         layout = { preset = 'vertical', layout = { width = 0.9, height = 0.9 } },
+        sources = {
+          explorer = {
+            layout = { layout = { width = 0.25 } },
+          },
+        },
       },
       lazygit = {},
       indent = { animate = { enabled = false } },
+      explorer = {},
     },
     keys = {
+      {
+        '\\',
+        function()
+          Snacks.explorer()
+        end,
+        desc = '[\\]Explorer',
+      },
       {
         '<leader>sh',
         function()
@@ -1178,7 +1191,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
-  require 'kickstart.plugins.neo-tree',
+  -- require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
