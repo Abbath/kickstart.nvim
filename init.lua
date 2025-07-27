@@ -188,6 +188,7 @@ vim.o.tabstop = 2
 vim.o.softtabstop = 2
 vim.o.expandtab = true
 vim.o.smoothscroll = true
+vim.o.winborder = 'rounded'
 
 if vim.loop.os_uname().sysname == 'Windows_NT' then
   vim.o.shell = 'pwsh'
