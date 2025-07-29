@@ -94,7 +94,7 @@ vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true
 
 if vim.g.neovide then
-  vim.o.guifont = 'JetBrainsMono Nerd Font'
+  vim.o.guifont = 'JetBrainsMono Nerd Font:h12'
   -- vim.o.guifont = 'FiraCode Nerd Font'
   -- vim.g.neovide_position_animation_length = 0
   -- vim.g.neovide_scroll_animation_length = 0
@@ -189,6 +189,7 @@ vim.o.softtabstop = 2
 vim.o.expandtab = true
 vim.o.smoothscroll = true
 vim.o.winborder = 'rounded'
+vim.api.nvim_command [[aunmenu PopUp.How-to\ disable\ mouse]]
 
 if vim.loop.os_uname().sysname == 'Windows_NT' then
   vim.o.shell = 'pwsh'
