@@ -752,6 +752,7 @@ require('lazy').setup({
           },
           -- gopls = {},
           -- pyright = {},
+          basedpyright = {},
           rust_analyzer = {},
           tinymist = {},
           -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -1075,23 +1076,23 @@ require('lazy').setup({
       set({ 'n', 'x' }, '<C-Down>', function()
         mc.lineAddCursor(1)
       end, { desc = 'Add cursor DOWN' })
-      set({ 'n', 'x' }, '<leader><up>', function()
+      set({ 'n', 'x' }, '<C-S-Up>', function()
         mc.lineSkipCursor(-1)
       end, { desc = 'Skip cursor UP' })
-      set({ 'n', 'x' }, '<leader><down>', function()
+      set({ 'n', 'x' }, '<C-S-Down>', function()
         mc.lineSkipCursor(1)
       end, { desc = 'Skip cursor DOWN' })
       -- Add or skip adding a new cursor by matching word/selection
-      set({ 'n', 'x' }, '<leader>n', function()
+      set({ 'n', 'x' }, '<C-Right>', function()
         mc.matchAddCursor(1)
       end, { desc = 'Match add cursor DOWN' })
-      set({ 'n', 'x' }, '<leader>N', function()
+      set({ 'n', 'x' }, '<C-S-Right>', function()
         mc.matchSkipCursor(1)
       end, { desc = 'Match skip cursor DOWN' })
-      set({ 'n', 'x' }, '<leader>ms', function()
+      set({ 'n', 'x' }, '<C-Left>', function()
         mc.matchAddCursor(-1)
       end, { desc = 'Match add cursor UP' })
-      set({ 'n', 'x' }, '<leader>mS', function()
+      set({ 'n', 'x' }, '<C-S-Left>', function()
         mc.matchSkipCursor(-1)
       end, { desc = 'Match skip cursor UP' })
 
