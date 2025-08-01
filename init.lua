@@ -100,7 +100,7 @@ if vim.g.neovide then
   -- vim.g.neovide_scroll_animation_length = 0
   vim.g.neovide_remember_window_size = true
   vim.g.neovide_remember_window_position = true
-  vim.g.neovide_cursor_animation_length = 0
+  -- vim.g.neovide_cursor_animation_length = 0
   vim.g.neovide_floating_corner_radius = 30
   vim.g.neovide_cursor_animate_in_insert_mode = true
   vim.g.neovide_cursor_smooth_blink = true
@@ -450,11 +450,18 @@ require('lazy').setup({
         desc = '[S]earch [K]eymaps',
       },
       {
-        '<leader>sf',
+        '<leader>sc',
         function()
-          Snacks.picker.smart()
+          Snacks.picker.commands()
         end,
-        desc = '[S]earch [F]iles',
+        desc = '[S]earch [C]ommands',
+      },
+      {
+        '<leader>sb',
+        function()
+          Snacks.picker.buffers()
+        end,
+        desc = '[S]earch [B]uffers',
       },
       {
         '<leader>ss',
@@ -472,11 +479,11 @@ require('lazy').setup({
         mode = { 'n', 'x' },
       },
       {
-        '<leader>sg',
+        '<leader>g',
         function()
           Snacks.picker.grep()
         end,
-        desc = '[S]earch by [G]rep',
+        desc = 'Search by [G]rep',
       },
       {
         '<leader>sd',
@@ -502,7 +509,7 @@ require('lazy').setup({
       {
         '<leader><leader>',
         function()
-          Snacks.picker.buffers()
+          Snacks.picker.smart()
         end,
         desc = '[ ] Find existing buffers',
       },
@@ -528,11 +535,25 @@ require('lazy').setup({
         desc = '[S]earch [N]eovim files',
       },
       {
-        '<leader>lg',
+        '<leader>sj',
+        function()
+          Snacks.picker.jumps()
+        end,
+        desc = '[S]earch [J]umps',
+      },
+      {
+        '<leader>p',
+        function()
+          Snacks.picker.projects()
+        end,
+        desc = '[P]rojects',
+      },
+      {
+        '<leader>l',
         function()
           Snacks.lazygit()
         end,
-        desc = 'Open Lazygit',
+        desc = 'Open [L]azygit',
       },
     },
   },
@@ -990,7 +1011,21 @@ require('lazy').setup({
   },
 
   -- Highlight todo, notes, etc in comments
-  { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
+  {
+    'folke/todo-comments.nvim',
+    event = 'VimEnter',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    opts = { signs = false },
+    keys = {
+      {
+        '<leader>d',
+        function()
+          Snacks.picker.todo_comments()
+        end,
+        desc = 'To[D]o',
+      },
+    },
+  },
   {
     'kylechui/nvim-surround',
     event = 'VeryLazy',
@@ -1139,26 +1174,6 @@ require('lazy').setup({
       hl(0, 'MultiCursorDisabledSign', { link = 'SignColumn' })
     end,
   },
-  -- {
-  --   'folke/snacks.nvim',
-  --   keys = {
-  --     {
-  --       '<leader>lg',
-  --       function()
-  --         Snacks.lazygit()
-  --       end,
-  --       desc = 'Open Lazygit',
-  --     },
-  --   },
-  --   ---@type snacks.Config
-  --   opts = {
-  --     lazygit = {
-  --       -- your lazygit configuration comes here
-  --       -- or leave it empty to use the default settings
-  --       -- refer to the configuration section below
-  --     },
-  --   },
-  -- },
   {
     'lervag/vimtex',
     lazy = false, -- we don't want to lazy load VimTeX
