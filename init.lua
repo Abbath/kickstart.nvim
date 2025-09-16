@@ -191,7 +191,11 @@ vim.o.smoothscroll = true
 vim.o.winborder = 'rounded'
 vim.api.nvim_command [[aunmenu PopUp.How-to\ disable\ mouse]]
 
-if vim.loop.os_uname().sysname == 'Windows_NT' then
+local check_windows = function()
+  return vim.loop.os_uname().sysname == 'Windows_NT'
+end
+
+if check_windows() then
   vim.o.shell = 'pwsh'
   vim.o.shellcmdflag =
     "-NoLogo -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;$PSStyle.Formatting.Error = '';$PSStyle.Formatting.ErrorAccent = '';$PSStyle.Formatting.Warning = '';$PSStyle.OutputRendering = 'PlainText';"
@@ -551,7 +555,11 @@ require('lazy').setup({
       {
         '<leader>p',
         function()
-          Snacks.picker.projects()
+          if check_windows() then
+            Snacks.picker.projects { dev = { 'C:/Code' } }
+          else
+            Snacks.picker.projects { dev = { '~/Work', '~/C' } }
+          end
         end,
         desc = '[P]rojects',
       },
@@ -810,7 +818,7 @@ require('lazy').setup({
         others = {},
       }
 
-      if vim.loop.os_uname().sysname == 'Windows_NT' then
+      if check_windows() then
         servers.mason.clangd = { cmd = { 'clangd', '--query-driver=C:\\ProgramData\\mingw64\\mingw64\\bin\\g++.exe' } }
       end
 
