@@ -848,7 +848,7 @@ require('lazy').setup({
       }
 
       if check_windows() then
-        servers.mason.clangd = { cmd = { 'clangd', '--query-driver=C:\\ProgramData\\mingw64\\mingw64\\bin\\g++.exe' } }
+        servers.mason.clangd = { cmd = { 'clangd', '--query-driver=C:\\ProgramData\\mingw64\\mingw64\\bin\\g*.exe' } }
       end
 
       -- Ensure the servers and tools above are installed
