@@ -189,6 +189,7 @@ vim.o.softtabstop = 2
 vim.o.expandtab = true
 vim.o.smoothscroll = true
 vim.o.winborder = 'rounded'
+vim.o.virtualedit = 'block'
 vim.api.nvim_command [[aunmenu PopUp.How-to\ disable\ mouse]]
 
 local check_windows = function()
