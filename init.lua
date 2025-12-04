@@ -92,6 +92,7 @@ vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
+vim.g.c_syntax_for_h = true
 
 if vim.g.neovide then
   vim.o.guifont = 'JetBrainsMono Nerd Font:h12'
@@ -1122,6 +1123,8 @@ require('lazy').setup({
       --  Check out: https://github.com/echasnovski/mini.nvim
       require('mini.move').setup {}
       require('mini.align').setup {}
+      require('mini.misc').setup {}
+      MiniMisc.setup_auto_root()
     end,
   },
   { -- Highlight, edit, and navigate code
@@ -1136,7 +1139,7 @@ require('lazy').setup({
     'MeanderingProgrammer/treesitter-modules.nvim',
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
     opts = {
-      ensure_installed = { 'bash', 'c', 'python', 'haskell', 'diff', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'c', 'cpp', 'python', 'haskell', 'diff', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
