@@ -1125,6 +1125,7 @@ require('lazy').setup({
       require('mini.align').setup {}
       require('mini.misc').setup {}
       MiniMisc.setup_auto_root()
+      MiniMisc.setup_restore_cursor()
     end,
   },
   { -- Highlight, edit, and navigate code
