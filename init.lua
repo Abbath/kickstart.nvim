@@ -809,7 +809,6 @@ require('lazy').setup({
           clangd = {},
           ruff = {},
           zls = {},
-          ols = {},
           hls = {
             settings = {
               haskell = {
@@ -854,7 +853,9 @@ require('lazy').setup({
             },
           },
         },
-        others = {},
+        others = {
+          ols = {},
+        },
       }
 
       if check_windows() then
