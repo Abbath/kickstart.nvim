@@ -1163,7 +1163,7 @@ require('lazy').setup({
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
         additional_vim_regex_highlighting = { 'ruby' },
       },
-      indent = { enable = true, disable = { 'ruby', 'cpp' } },
+      indent = { enable = true, disable = { 'ruby', 'cpp', 'c' } },
       incremental_selection = { enable = true, keymaps = { node_incremental = '<M-o>', node_decremental = 'M-i' } },
     },
     -- There are additional nvim-treesitter modules that you can use to interact
