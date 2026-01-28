@@ -263,6 +263,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'c', 'cpp', 'h', 'hpp' },
   callback = function()
+    vim.o.shiftwidth = 2
     vim.keymap.set('n', '<F4>', ':LspClangdSwitchSourceHeader<CR>', { desc = 'Switch source/header' })
   end,
 })
@@ -1163,7 +1164,7 @@ require('lazy').setup({
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
         additional_vim_regex_highlighting = { 'ruby' },
       },
-      indent = { enable = true, disable = { 'ruby', 'cpp', 'c' } },
+      indent = { enable = true, disable = { 'ruby' } },
       incremental_selection = { enable = true, keymaps = { node_incremental = '<M-o>', node_decremental = 'M-i' } },
     },
     -- There are additional nvim-treesitter modules that you can use to interact
