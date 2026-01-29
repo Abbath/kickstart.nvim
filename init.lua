@@ -188,6 +188,7 @@ vim.o.autoread = true
 vim.o.tabstop = 2
 vim.o.softtabstop = 2
 vim.o.expandtab = true
+vim.o.shiftwidth = 2
 vim.o.smoothscroll = true
 vim.o.winborder = 'rounded'
 vim.o.virtualedit = 'block'
@@ -263,7 +264,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'c', 'cpp', 'h', 'hpp' },
   callback = function()
-    vim.o.shiftwidth = 2
     vim.keymap.set('n', '<F4>', ':LspClangdSwitchSourceHeader<CR>', { desc = 'Switch source/header' })
   end,
 })
