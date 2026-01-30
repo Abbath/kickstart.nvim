@@ -867,7 +867,11 @@ require('lazy').setup({
           },
         },
         others = {
-          ols = {},
+          ols = {
+            settings = {
+              checker_args = '-vet -strict-style',
+            },
+          },
         },
       }
 
