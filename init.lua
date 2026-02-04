@@ -861,7 +861,7 @@ require('lazy').setup({
                 },
                 -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
                 -- diagnostics = { disable = { 'missing-fields' } },
-                diagnostics = { globals = { 'vim' } },
+                diagnostics = { globals = { 'vim', 'Snacks', 'MiniMisc' } },
               },
             },
           },
@@ -1226,6 +1226,9 @@ require('lazy').setup({
 
       -- Disable and enable cursors.
       set({ 'n', 'x' }, '<c-q>', mc.toggleCursor)
+
+      -- Add a cursor for all matches of cursor word/selection in the document.
+      set({ 'n', 'x' }, '<leader>A', mc.matchAllAddCursors, { desc = 'Add cursors' })
 
       -- Mappings defined in a keymap layer only apply when there are
       -- multiple cursors. This lets you have overlapping mappings.
