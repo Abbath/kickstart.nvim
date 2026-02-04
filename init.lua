@@ -1228,7 +1228,13 @@ require('lazy').setup({
       set({ 'n', 'x' }, '<c-q>', mc.toggleCursor)
 
       -- Add a cursor for all matches of cursor word/selection in the document.
+
       set({ 'n', 'x' }, '<leader>A', mc.matchAllAddCursors, { desc = 'Add cursors' })
+
+      -- Pressing `<leader>miwap` will create a cursor in every match of the
+      -- string captured by `iw` inside range `ap`.
+      -- This action is highly customizable, see `:h multicursor-operator`.
+      set({ 'n', 'x' }, '<leader>m', mc.operator)
 
       -- Mappings defined in a keymap layer only apply when there are
       -- multiple cursors. This lets you have overlapping mappings.
