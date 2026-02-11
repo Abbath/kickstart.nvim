@@ -475,6 +475,8 @@ require('lazy').setup({
       lazygit = {},
       indent = { animate = { enabled = false } },
       explorer = {},
+      terminal = {},
+      scratch = {},
     },
     keys = {
       {
@@ -607,6 +609,27 @@ require('lazy').setup({
           Snacks.lazygit()
         end,
         desc = 'Open [L]azygit',
+      },
+      {
+        '<leader>tt',
+        function()
+          Snacks.terminal.toggle()
+        end,
+        desc = 'Toggle [T]erminal',
+      },
+      {
+        '<leader>.',
+        function()
+          Snacks.scratch()
+        end,
+        desc = 'Toggle Scratch Buffer',
+      },
+      {
+        '<leader>S',
+        function()
+          Snacks.scratch.select()
+        end,
+        desc = 'Select Scratch Buffer',
       },
     },
   },
