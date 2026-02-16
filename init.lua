@@ -1303,6 +1303,24 @@ require('lazy').setup({
     end,
   },
   { 'HiPhish/rainbow-delimiters.nvim' },
+  {
+    'NeogitOrg/neogit',
+    lazy = true,
+    dependencies = {
+      'nvim-lua/plenary.nvim', -- required
+
+      -- Only one of these is needed.
+      'esmuellert/codediff.nvim', -- optional
+
+      -- Only one of these is needed.
+      'folke/snacks.nvim', -- optional
+      'MunifTanjim/nui.nvim',
+    },
+    cmd = 'Neogit',
+    keys = {
+      { '<leader>n', '<cmd>Neogit<cr>', desc = 'Show Neogit UI' },
+    },
+  },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
