@@ -321,6 +321,7 @@ vim.api.nvim_create_autocmd('ColorScheme', {
   end,
 })
 
+require('subvert').setup()
 -- [[ Configure and install plugins ]]
 --
 --  To check the current status of your plugins, run
@@ -898,6 +899,7 @@ require('lazy').setup({
               checker_args = '-vet -strict-style',
             },
           },
+          uiua = {},
         },
       }
 
@@ -1336,7 +1338,8 @@ require('lazy').setup({
       { '<leader>n', '<cmd>Neogit<cr>', desc = 'Show Neogit UI' },
     },
   },
-  { 'tpope/vim-abolish' },
+  -- { 'tpope/vim-abolish' },
+  { 'Apeiros-46B/uiua.vim' },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
