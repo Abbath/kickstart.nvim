@@ -105,9 +105,7 @@ if vim.g.neovide then
   vim.g.neovide_floating_corner_radius = 30
   vim.g.neovide_cursor_animate_in_insert_mode = true
   vim.g.neovide_cursor_smooth_blink = true
-  vim.keymap.set('n', '<F11>', function()
-    vim.g.neovide_fullscreen = not vim.g.neovide_fullscreen
-  end)
+  vim.keymap.set('n', '<F11>', function() vim.g.neovide_fullscreen = not vim.g.neovide_fullscreen end)
 end
 
 -- [[ Setting options ]]
@@ -131,9 +129,7 @@ vim.o.showmode = false
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
-vim.schedule(function()
-  vim.o.clipboard = 'unnamedplus'
-end)
+vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
 
 -- Enable break indent
 vim.o.breakindent = true
@@ -197,9 +193,7 @@ vim.o.winborder = 'rounded'
 vim.o.virtualedit = 'block'
 vim.api.nvim_command [[aunmenu PopUp.How-to\ disable\ mouse]]
 
-local check_windows = function()
-  return vim.loop.os_uname().sysname == 'Windows_NT'
-end
+local check_windows = function() return vim.loop.os_uname().sysname == 'Windows_NT' end
 
 if check_windows() then
   vim.o.shell = 'pwsh'
@@ -259,16 +253,12 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
-  callback = function()
-    vim.hl.on_yank()
-  end,
+  callback = function() vim.hl.on_yank() end,
 })
 
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'c', 'cpp', 'h', 'hpp' },
-  callback = function()
-    vim.keymap.set('n', '<F4>', ':LspClangdSwitchSourceHeader<CR>', { desc = 'Switch source/header' })
-  end,
+  callback = function() vim.keymap.set('n', '<F4>', ':LspClangdSwitchSourceHeader<CR>', { desc = 'Switch source/header' }) end,
 })
 
 -- [[ Install `lazy.nvim` plugin manager ]]
@@ -277,9 +267,7 @@ local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
   local out = vim.fn.system { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath }
-  if vim.v.shell_error ~= 0 then
-    error('Error cloning lazy.nvim:\n' .. out)
-  end
+  if vim.v.shell_error ~= 0 then error('Error cloning lazy.nvim:\n' .. out) end
 end
 
 ---@type vim.Option
@@ -316,9 +304,7 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 vim.api.nvim_create_autocmd('ColorScheme', {
-  callback = function()
-    vim.api.nvim_set_hl(0, '@lsp.type.enumMember.haskell', { link = '@constructor' })
-  end,
+  callback = function() vim.api.nvim_set_hl(0, '@lsp.type.enumMember.haskell', { link = '@constructor' }) end,
 })
 
 require('subvert').setup()
@@ -485,115 +471,83 @@ require('lazy').setup({
     keys = {
       {
         '\\',
-        function()
-          Snacks.explorer()
-        end,
+        function() Snacks.explorer() end,
         desc = '[\\]Explorer',
       },
       {
         '<leader>sh',
-        function()
-          Snacks.picker.help()
-        end,
+        function() Snacks.picker.help() end,
         desc = '[S]earch [H]elp',
       },
       {
         '<leader>sk',
-        function()
-          Snacks.picker.keymaps()
-        end,
+        function() Snacks.picker.keymaps() end,
         desc = '[S]earch [K]eymaps',
       },
       {
         '<leader>sc',
-        function()
-          Snacks.picker.commands()
-        end,
+        function() Snacks.picker.commands() end,
         desc = '[S]earch [C]ommands',
       },
       {
         '<leader>sb',
-        function()
-          Snacks.picker.buffers()
-        end,
+        function() Snacks.picker.buffers() end,
         desc = '[S]earch [B]uffers',
       },
       {
         '<leader>ss',
-        function()
-          Snacks.picker.pickers()
-        end,
+        function() Snacks.picker.pickers() end,
         desc = '[S]earch [S]elect Snacks',
       },
       {
         '<leader>sw',
-        function()
-          Snacks.picker.grep_word()
-        end,
+        function() Snacks.picker.grep_word() end,
         desc = '[S]earch current [W]ord',
         mode = { 'n', 'x' },
       },
       {
         '<leader>g',
-        function()
-          Snacks.picker.grep()
-        end,
+        function() Snacks.picker.grep() end,
         desc = 'Search by [G]rep',
       },
       {
         '<leader>sd',
-        function()
-          Snacks.picker.diagnostics()
-        end,
+        function() Snacks.picker.diagnostics() end,
         desc = '[S]earch [D]iagnostics',
       },
       {
         '<leader>sr',
-        function()
-          Snacks.picker.resume()
-        end,
+        function() Snacks.picker.resume() end,
         desc = '[S]earch [R]esume',
       },
       {
         '<leader>s.',
-        function()
-          Snacks.picker.recent()
-        end,
+        function() Snacks.picker.recent() end,
         desc = '[S]earch Recent Files ("." for repeat)',
       },
       {
         '<leader><leader>',
-        function()
-          Snacks.picker.smart()
-        end,
+        function() Snacks.picker.smart() end,
         desc = '[ ] Find existing buffers',
       },
       {
         '<leader>/',
-        function()
-          Snacks.picker.lines {}
-        end,
+        function() Snacks.picker.lines {} end,
         desc = '[/] Fuzzily search in current buffer',
       },
       {
         '<leader>s/',
-        function()
-          Snacks.picker.grep_buffers()
-        end,
+        function() Snacks.picker.grep_buffers() end,
         desc = '[S]earch [/] in Open Files',
       },
       {
         '<leader>sn',
-        function()
-          Snacks.picker.files { cwd = vim.fn.stdpath 'config' }
-        end,
+        function() Snacks.picker.files { cwd = vim.fn.stdpath 'config' } end,
         desc = '[S]earch [N]eovim files',
       },
       {
         '<leader>sj',
-        function()
-          Snacks.picker.jumps()
-        end,
+        function() Snacks.picker.jumps() end,
         desc = '[S]earch [J]umps',
       },
       {
@@ -609,30 +563,22 @@ require('lazy').setup({
       },
       {
         '<leader>l',
-        function()
-          Snacks.lazygit()
-        end,
+        function() Snacks.lazygit() end,
         desc = 'Open [L]azygit',
       },
       {
         '<leader>tt',
-        function()
-          Snacks.terminal.toggle()
-        end,
+        function() Snacks.terminal.toggle() end,
         desc = 'Toggle [T]erminal',
       },
       {
         '<leader>.',
-        function()
-          Snacks.scratch()
-        end,
+        function() Snacks.scratch() end,
         desc = 'Toggle Scratch Buffer',
       },
       {
         '<leader>S',
-        function()
-          Snacks.scratch.select()
-        end,
+        function() Snacks.scratch.select() end,
         desc = 'Select Scratch Buffer',
       },
     },
@@ -749,9 +695,7 @@ require('lazy').setup({
           --  the definition of its *type*, not where it was *defined*.
           map('grt', require('snacks').picker.lsp_type_definitions, '[G]oto [T]ype Definition')
 
-          map('<leader>td', function()
-            vim.diagnostic.enable(not vim.diagnostic.is_enabled())
-          end, '[T]oggle [D]iagnostics')
+          map('<leader>td', function() vim.diagnostic.enable(not vim.diagnostic.is_enabled()) end, '[T]oggle [D]iagnostics')
 
           -- The following two autocommands are used to highlight references of the
           -- word under your cursor when your cursor rests there for a little while.
@@ -787,9 +731,7 @@ require('lazy').setup({
           --
           -- This may be unwanted, since they displace some of your code
           if client and client:supports_method('textDocument/inlayHint', event.buf) then
-            map('<leader>th', function()
-              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-            end, '[T]oggle Inlay [H]ints')
+            map('<leader>th', function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf }) end, '[T]oggle Inlay [H]ints')
           end
         end,
       })
@@ -797,30 +739,12 @@ require('lazy').setup({
       -- Diagnostic Config
       -- See :help vim.diagnostic.Opts
       vim.diagnostic.config {
+        update_in_insert = false,
         severity_sort = true,
         float = { border = 'rounded', source = 'if_many' },
         underline = { severity = vim.diagnostic.severity.ERROR },
-        signs = vim.g.have_nerd_font and {
-          text = {
-            [vim.diagnostic.severity.ERROR] = '󰅚 ',
-            [vim.diagnostic.severity.WARN] = '󰀪 ',
-            [vim.diagnostic.severity.INFO] = '󰋽 ',
-            [vim.diagnostic.severity.HINT] = '󰌶 ',
-          },
-        } or {},
-        virtual_text = {
-          source = 'if_many',
-          spacing = 2,
-          format = function(diagnostic)
-            local diagnostic_message = {
-              [vim.diagnostic.severity.ERROR] = diagnostic.message,
-              [vim.diagnostic.severity.WARN] = diagnostic.message,
-              [vim.diagnostic.severity.INFO] = diagnostic.message,
-              [vim.diagnostic.severity.HINT] = diagnostic.message,
-            }
-            return diagnostic_message[diagnostic.severity]
-          end,
-        },
+        virtual_text = true,
+        jump = { float = true },
       }
 
       -- LSP servers and clients are able to communicate to each other what features they support.
@@ -903,9 +827,7 @@ require('lazy').setup({
         },
       }
 
-      if check_windows() then
-        servers.mason.clangd = { cmd = { 'clangd', '--query-driver=C:\\ProgramData\\mingw64\\mingw64\\bin\\g*.exe' } }
-      end
+      if check_windows() then servers.mason.clangd = { cmd = { 'clangd', '--query-driver=C:\\ProgramData\\mingw64\\mingw64\\bin\\g*.exe' } } end
 
       -- Ensure the servers and tools above are installed
       --
@@ -930,9 +852,7 @@ require('lazy').setup({
       -- to the default language server configs as provided by nvim-lspconfig or
       -- define a custom server config that's unavailable on nvim-lspconfig.
       for server, config in pairs(vim.tbl_extend('keep', servers.mason, servers.others)) do
-        if not vim.tbl_isempty(config) then
-          vim.lsp.config(server, config)
-        end
+        if not vim.tbl_isempty(config) then vim.lsp.config(server, config) end
       end
 
       require('mason-lspconfig').setup {
@@ -941,9 +861,7 @@ require('lazy').setup({
       }
 
       -- Manually run vim.lsp.enable for all language servers that are *not* installed via Mason
-      if not vim.tbl_isempty(servers.others) then
-        vim.lsp.enable(vim.tbl_keys(servers.others))
-      end
+      if not vim.tbl_isempty(servers.others) then vim.lsp.enable(vim.tbl_keys(servers.others)) end
     end,
   },
 
@@ -954,9 +872,7 @@ require('lazy').setup({
     keys = {
       {
         '<leader>f',
-        function()
-          require('conform').format { async = true, lsp_format = 'fallback' }
-        end,
+        function() require('conform').format { async = true, lsp_format = 'fallback' } end,
         mode = '',
         desc = '[F]ormat buffer',
       },
@@ -1003,9 +919,7 @@ require('lazy').setup({
           -- Build Step is needed for regex support in snippets.
           -- This step is not supported in many windows environments.
           -- Remove the below condition to re-enable on windows.
-          if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
-            return
-          end
+          if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then return end
           return 'make install_jsregexp'
         end)(),
         dependencies = {
@@ -1014,9 +928,7 @@ require('lazy').setup({
           --    https://github.com/rafamadriz/friendly-snippets
           {
             'rafamadriz/friendly-snippets',
-            config = function()
-              require('luasnip.loaders.from_vscode').lazy_load()
-            end,
+            config = function() require('luasnip.loaders.from_vscode').lazy_load() end,
           },
         },
         opts = {},
@@ -1134,9 +1046,7 @@ require('lazy').setup({
     keys = {
       {
         '<leader>d',
-        function()
-          Snacks.picker.todo_comments()
-        end,
+        function() Snacks.picker.todo_comments() end,
         desc = 'To[D]o',
       },
     },
@@ -1176,9 +1086,7 @@ require('lazy').setup({
       -- default behavior. For example, here we set the section for
       -- cursor location to LINE:COLUMN
       ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return '%2l:%-2v %3p%%'
-      end
+      statusline.section_location = function() return '%2l:%-2v %3p%%' end
 
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
@@ -1236,31 +1144,15 @@ require('lazy').setup({
       local set = vim.keymap.set
 
       -- Add or skip cursor above/below the main cursor.
-      set({ 'n', 'x' }, '<C-Up>', function()
-        mc.lineAddCursor(-1)
-      end, { desc = 'Add cursor UP' })
-      set({ 'n', 'x' }, '<C-Down>', function()
-        mc.lineAddCursor(1)
-      end, { desc = 'Add cursor DOWN' })
-      set({ 'n', 'x' }, '<C-S-Up>', function()
-        mc.lineSkipCursor(-1)
-      end, { desc = 'Skip cursor UP' })
-      set({ 'n', 'x' }, '<C-S-Down>', function()
-        mc.lineSkipCursor(1)
-      end, { desc = 'Skip cursor DOWN' })
+      set({ 'n', 'x' }, '<C-Up>', function() mc.lineAddCursor(-1) end, { desc = 'Add cursor UP' })
+      set({ 'n', 'x' }, '<C-Down>', function() mc.lineAddCursor(1) end, { desc = 'Add cursor DOWN' })
+      set({ 'n', 'x' }, '<C-S-Up>', function() mc.lineSkipCursor(-1) end, { desc = 'Skip cursor UP' })
+      set({ 'n', 'x' }, '<C-S-Down>', function() mc.lineSkipCursor(1) end, { desc = 'Skip cursor DOWN' })
       -- Add or skip adding a new cursor by matching word/selection
-      set({ 'n', 'x' }, '<C-Right>', function()
-        mc.matchAddCursor(1)
-      end, { desc = 'Match add cursor DOWN' })
-      set({ 'n', 'x' }, '<C-S-Right>', function()
-        mc.matchSkipCursor(1)
-      end, { desc = 'Match skip cursor DOWN' })
-      set({ 'n', 'x' }, '<C-Left>', function()
-        mc.matchAddCursor(-1)
-      end, { desc = 'Match add cursor UP' })
-      set({ 'n', 'x' }, '<C-S-Left>', function()
-        mc.matchSkipCursor(-1)
-      end, { desc = 'Match skip cursor UP' })
+      set({ 'n', 'x' }, '<C-Right>', function() mc.matchAddCursor(1) end, { desc = 'Match add cursor DOWN' })
+      set({ 'n', 'x' }, '<C-S-Right>', function() mc.matchSkipCursor(1) end, { desc = 'Match skip cursor DOWN' })
+      set({ 'n', 'x' }, '<C-Left>', function() mc.matchAddCursor(-1) end, { desc = 'Match add cursor UP' })
+      set({ 'n', 'x' }, '<C-S-Left>', function() mc.matchSkipCursor(-1) end, { desc = 'Match skip cursor UP' })
 
       -- Add and remove cursors with control + left click.
       set('n', '<m-leftmouse>', mc.handleMouse)
