@@ -196,6 +196,7 @@ vim.api.nvim_command [[aunmenu PopUp.How-to\ disable\ mouse]]
 local check_windows = function() return vim.loop.os_uname().sysname == 'Windows_NT' end
 
 if check_windows() then
+  vim.o.shelltemp = false
   vim.o.shell = 'pwsh'
   vim.o.shellcmdflag =
     "-NoLogo -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;$PSStyle.Formatting.Error = '';$PSStyle.Formatting.ErrorAccent = '';$PSStyle.Formatting.Warning = '';$PSStyle.OutputRendering = 'PlainText';"
@@ -593,7 +594,7 @@ require('lazy').setup({
       -- Mason must be loaded before its dependents so we need to set it up here.
       -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
       { 'mason-org/mason.nvim', opts = {} },
-      -- 'mason-org/mason-lspconfig.nvim',
+      'mason-org/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
@@ -813,9 +814,7 @@ require('lazy').setup({
         'stylua', -- Used to format Lua code
       })
 
-      require('mason-tool-installer').setup {
-        ensure_installed = { 'clangd', 'ruff', 'zls', 'haskell-language-server', 'basedpyright', 'rust-analyzer', 'tinymist', 'stylua' },
-      }
+      require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       -- Either merge all additional server configs from the `servers.mason` and `servers.others` tables
       -- to the default language server configs as provided by nvim-lspconfig or
