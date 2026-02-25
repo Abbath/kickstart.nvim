@@ -823,6 +823,11 @@ require('lazy').setup({
         if not vim.tbl_isempty(config) then vim.lsp.config(server, config) end
       end
 
+      require('mason-lspconfig').setup {
+        ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
+        automatic_enable = true,
+      }
+
       -- Manually run vim.lsp.enable for all language servers that are *not* installed via Mason
       if not vim.tbl_isempty(servers.others) then vim.lsp.enable(vim.tbl_keys(servers.others)) end
       vim.lsp.config('lua_ls', {
