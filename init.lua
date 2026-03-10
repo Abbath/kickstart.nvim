@@ -934,6 +934,7 @@ require('lazy').setup({
     --- @type blink.cmp.Config
     opts = {
       keymap = {
+        preset = 'none',
         -- 'default' (recommended) for mappings similar to built-in completions
         --   <c-y> to accept ([y]es) the completion.
         --    This will auto-import if your LSP supports it.
