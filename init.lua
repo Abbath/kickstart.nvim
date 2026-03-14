@@ -1222,6 +1222,7 @@ require('lazy').setup({
     keys = {
       { '<leader>n', '<cmd>Neogit<cr>', desc = 'Show Neogit UI' },
     },
+    opts = { sections = { untracked = { folded = true } } },
   },
   -- { 'tpope/vim-abolish' },
   { 'Apeiros-46B/uiua.vim' },
