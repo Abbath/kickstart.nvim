@@ -375,7 +375,7 @@ local function execute_subvert(bang, line1, line2, count, raw_args)
   end
 
   local cmd = build_substitute_cmd(range, bad, good, flags)
-  vim.api.nvim_echo(cmd, false, {})
+  vim.api.nvim_echo({ { cmd } }, false, {})
   local ok, err = pcall(function(s) vim.cmd(s) end, cmd)
   if not ok then err_echo('Subvert: ' .. tostring(err)) end
 end
