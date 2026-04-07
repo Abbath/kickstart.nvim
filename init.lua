@@ -308,6 +308,7 @@ vim.api.nvim_create_autocmd('ColorScheme', {
   callback = function() vim.api.nvim_set_hl(0, '@lsp.type.enumMember.haskell', { link = '@constructor' }) end,
 })
 
+vim.cmd 'packadd nvim.undotree'
 require('subvert').setup()
 -- [[ Configure and install plugins ]]
 --
