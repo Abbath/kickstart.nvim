@@ -311,6 +311,7 @@ vim.api.nvim_create_autocmd('ColorScheme', {
 vim.api.nvim_create_autocmd('UIEnter', {
   once = true,
   callback = function()
+    if vim.g.neovide then return end
     require('vim._core.ui2').enable {
       enable = true,
       msg = {
