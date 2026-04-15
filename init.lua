@@ -1074,7 +1074,7 @@ require('lazy').setup({
       --  - va)  - [V]isually select [A]round [)]paren
       --  - yinq - [Y]ank [I]nside [N]ext [Q]uote
       --  - ci'  - [C]hange [I]nside [']quote
-      require('mini.ai').setup { n_lines = 500 }
+      -- require('mini.ai').setup { n_lines = 500 }
 
       -- Add/delete/replace surroundings (brackets, quotes, etc.)
       --
@@ -1114,30 +1114,35 @@ require('lazy').setup({
     lazy = false,
     -- main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-  },
-  {
-    'MeanderingProgrammer/treesitter-modules.nvim',
-    dependencies = { 'nvim-treesitter/nvim-treesitter' },
-    opts = {
-      ensure_installed = { 'bash', 'c', 'cpp', 'python', 'haskell', 'diff', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
-      -- Autoinstall languages that are not installed
-      auto_install = true,
-      highlight = {
-        enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
-      },
-      indent = { enable = true, disable = { 'ruby' } },
-      incremental_selection = { enable = true, keymaps = { node_incremental = '<M-o>', node_decremental = 'M-i' } },
-    },
-    -- There are additional nvim-treesitter modules that you can use to interact
-    -- with nvim-treesitter. You should go explore a few and see what interests you:
-    --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+    config = function()
+      -- replicate `ensure_installed`, runs asynchronously, skips existing languages
+      local languages = { 'bash', 'c', 'cpp', 'python', 'haskell', 'diff', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+      require('nvim-treesitter').install(languages)
+
+      vim.api.nvim_create_autocmd('FileType', {
+        group = vim.api.nvim_create_augroup('treesitter.setup', {}),
+        callback = function(args)
+          local buf = args.buf
+          local line_count = vim.api.nvim_buf_line_count(buf)
+          if line_count > 10000 then return end
+          local filetype = args.match
+
+          -- you need some mechanism to avoid running on buffers that do not
+          -- correspond to a language (like oil.nvim buffers), this implementation
+          -- checks if a parser exists for the current language
+          local language = vim.treesitter.language.get_lang(filetype) or filetype
+          if not vim.treesitter.language.add(language) then return end
+
+          -- replicate `highlight = { enable = true }`
+          vim.treesitter.start(buf, language)
+
+          -- replicate `indent = { enable = true }`
+          vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+
+          -- `incremental_selection = { enable = true }` covered by 0.12.0
+        end,
+      })
+    end,
   },
   {
     'nvim-treesitter/nvim-treesitter-context',
@@ -1220,7 +1225,26 @@ require('lazy').setup({
       vim.g.vimtex_view_method = 'sioyek'
     end,
   },
-  { 'HiPhish/rainbow-delimiters.nvim' },
+  {
+    'HiPhish/rainbow-delimiters.nvim',
+    config = function()
+      require('rainbow-delimiters.setup').setup {
+        strategy = {
+          [''] = function(bufnr)
+            -- Disabled for very large files, global strategy for large files,
+            -- local strategy otherwise
+            local line_count = vim.api.nvim_buf_line_count(bufnr)
+            if line_count > 10000 then
+              return nil
+            elseif line_count > 1000 then
+              return 'rainbow-delimiters.strategy.global'
+            end
+            return 'rainbow-delimiters.strategy.local'
+          end,
+        },
+      }
+    end,
+  },
   {
     'NeogitOrg/neogit',
     lazy = true,
