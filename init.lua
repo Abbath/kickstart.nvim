@@ -308,21 +308,15 @@ vim.api.nvim_create_autocmd('ColorScheme', {
   callback = function() vim.api.nvim_set_hl(0, '@lsp.type.enumMember.haskell', { link = '@constructor' }) end,
 })
 
-vim.api.nvim_create_autocmd('UIEnter', {
-  once = true,
-  callback = function()
-    if vim.g.neovide then return end
-    require('vim._core.ui2').enable {
-      enable = true,
-      msg = {
-        targets = 'cmd',
-        msg = {
-          timeout = 4000,
-        },
-      },
-    }
-  end,
-})
+require('vim._core.ui2').enable {
+  enable = true,
+  msg = {
+    targets = 'cmd',
+    msg = {
+      timeout = 4000,
+    },
+  },
+}
 
 vim.cmd 'packadd nvim.undotree'
 require('subvert').setup()
