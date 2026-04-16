@@ -765,7 +765,15 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         mason = {
-          clangd = {},
+          clangd = {
+            capabilities = {
+              textDocument = {
+                semanticHighlightingCapabilities = {
+                  semanticHighlighting = true,
+                },
+              },
+            },
+          },
           ruff = {},
           zls = {},
           hls = {
@@ -782,20 +790,20 @@ require('lazy').setup({
           },
           -- gopls = {},
           -- pyright = {},
-          -- basedpyright = {
-          --   settings = {
-          --     basedpyright = {
-          --       analysis = {
-          --         typeCheckingMode = 'off',
-          --       },
-          --     },
-          --   },
-          -- },
+          basedpyright = {
+            settings = {
+              basedpyright = {
+                analysis = {
+                  typeCheckingMode = 'off',
+                },
+              },
+            },
+          },
           rust_analyzer = {},
           tinymist = {},
           -- pyrefly = {},
           -- zuban = {},
-          ty = {},
+          -- ty = {},
           -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
           --
           -- Some languages (like typescript) have entire language plugins that can be useful:
