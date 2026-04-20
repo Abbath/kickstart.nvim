@@ -775,7 +775,6 @@ require('lazy').setup({
             },
           },
           ruff = {},
-          zls = {},
           hls = {
             settings = {
               haskell = {
