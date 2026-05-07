@@ -1165,7 +1165,8 @@ do
   vim.api.nvim_create_autocmd('FileType', {
     callback = function(args)
       local buf, filetype = args.buf, args.match
-
+      local line_count = vim.api.nvim_buf_line_count(buf)
+      if line_count > 10000 then return end
       local language = vim.treesitter.language.get_lang(filetype)
       if not language then return end
 
@@ -1309,6 +1310,7 @@ do
     { src = gh 'NeogitOrg/neogit' },
     { src = gh 'Apeiros-46B/uiua.vim' },
   }
+  require('neogit').setup { sections = { untracked = { hidden = false, folded = true } } }
   set({ 'n', 'x' }, '<leader>n', '<cmd>Neogit<cr>', { desc = 'Show Neogit UI' })
 end
 -- The line beneath this is called `modeline`. See `:help modeline`
