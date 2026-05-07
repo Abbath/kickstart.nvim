@@ -84,6 +84,7 @@ I hope you enjoy your Neovim journey,
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
 
+local check_windows = function() return vim.loop.os_uname().sysname == 'Windows_NT' end
 -- ============================================================
 -- SECTION 1: FOUNDATION
 -- Core Neovim settings, leaders, options, basic keymaps, basic autocmds
@@ -100,17 +101,32 @@ do
 
   -- Set to true if you have a Nerd Font installed and selected in the terminal
   vim.g.have_nerd_font = false
+  vim.g.c_syntax_for_h = true
 
   -- [[ Setting options ]]
   --  See `:help vim.o`
   -- NOTE: You can change these options as you wish!
   --  For more options, you can see `:help option-list`
 
+  if vim.g.neovide then
+    vim.o.guifont = 'JetBrainsMono Nerd Font:h12'
+    -- vim.o.guifont = 'FiraCode Nerd Font'
+    -- vim.g.neovide_position_animation_length = 0
+    -- vim.g.neovide_scroll_animation_length = 0
+    vim.g.neovide_remember_window_size = true
+    vim.g.neovide_remember_window_position = true
+    -- vim.g.neovide_cursor_animation_length = 0
+    vim.g.neovide_floating_corner_radius = 30
+    vim.g.neovide_cursor_animate_in_insert_mode = true
+    vim.g.neovide_cursor_smooth_blink = true
+    vim.keymap.set('n', '<F11>', function() vim.g.neovide_fullscreen = not vim.g.neovide_fullscreen end)
+  end
+
   -- Make line numbers default
   vim.o.number = true
   -- You can also add relative line numbers, to help with jumping.
   --  Experiment for yourself to see if you like it!
-  -- vim.o.relativenumber = true
+  vim.o.relativenumber = true
 
   -- Enable mouse mode, can be useful for resizing splits for example!
   vim.o.mouse = 'a'
@@ -156,7 +172,7 @@ do
   --   See `:help lua-options`
   --   and `:help lua-guide-options`
   vim.o.list = true
-  vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+  vim.opt.listchars = { tab = '» ', trail = '·', space = '·', nbsp = '␣' }
 
   -- Preview substitutions live, as you type!
   vim.o.inccommand = 'split'
@@ -171,6 +187,31 @@ do
   -- instead raise a dialog asking if you wish to save the current file(s)
   -- See `:help 'confirm'`
   vim.o.confirm = true
+
+  vim.o.fileformat = 'unix'
+  vim.o.fileformats = 'unix,dos'
+
+  vim.o.autoread = true
+
+  vim.o.tabstop = 2
+  vim.o.softtabstop = 2
+  vim.o.expandtab = true
+  vim.o.shiftwidth = 2
+  vim.o.smoothscroll = true
+  vim.o.winborder = 'rounded'
+  vim.o.virtualedit = 'block'
+  vim.api.nvim_command [[aunmenu PopUp.How-to\ disable\ mouse]]
+
+  if check_windows() then
+    vim.o.shelltemp = false
+    vim.o.shell = 'pwsh'
+    vim.o.shellcmdflag =
+      "-NoLogo -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;$PSStyle.Formatting.Error = '';$PSStyle.Formatting.ErrorAccent = '';$PSStyle.Formatting.Warning = '';$PSStyle.OutputRendering = 'PlainText';"
+    vim.o.shellredir = '2>&1 | %%{ "$_" } | Out-File %s; exit $LastExitCode'
+    vim.o.shellpipe = '2>&1 | %%{ "$_" } | Out-File %s; exit $LastExitCode'
+    vim.o.shellquote = ''
+    vim.o.shellxquote = ''
+  end
 
   -- [[ Basic Keymaps ]]
   --  See `:help vim.keymap.set()`
@@ -214,10 +255,10 @@ do
   vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
   -- TIP: Disable arrow keys in normal mode
-  -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
-  -- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
-  -- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
-  -- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
+  vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
+  vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
+  vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
+  vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 
   -- Keybinds to make split navigation easier.
   --  Use CTRL+<hjkl> to switch between windows
@@ -245,6 +286,37 @@ do
     group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
     callback = function() vim.hl.on_yank() end,
   })
+
+  vim.api.nvim_create_autocmd('FileType', {
+    pattern = { 'c', 'cpp', 'h', 'hpp' },
+    callback = function() vim.keymap.set('n', '<F4>', ':LspClangdSwitchSourceHeader<CR>', { desc = 'Switch source/header' }) end,
+  })
+
+  vim.api.nvim_create_autocmd('FileType', {
+    group = vim.api.nvim_create_augroup('trim_whitespaces', { clear = true }),
+    desc = 'Trim trailing white spaces',
+    pattern = 'bash,c,cpp,make,python,rust,sql,markdown',
+    callback = function()
+      vim.api.nvim_create_autocmd('BufWritePre', {
+        pattern = '<buffer>',
+        -- Trim trailing whitespaces
+        callback = function()
+          -- Save cursor position to restore later
+          local curpos = vim.api.nvim_win_get_cursor(0)
+          -- Search and replace trailing whitespaces
+          vim.cmd [[keeppatterns %s/\s\+$//e]]
+          vim.api.nvim_win_set_cursor(0, curpos)
+        end,
+      })
+    end,
+  })
+
+  vim.api.nvim_create_autocmd('ColorScheme', {
+    callback = function() vim.api.nvim_set_hl(0, '@lsp.type.enumMember.haskell', { link = '@constructor' }) end,
+  })
+
+  vim.cmd.packadd 'nvim.undotree'
+  require('subvert').setup {}
 end
 
 -- ============================================================
@@ -373,7 +445,14 @@ do
       { '<leader>s', group = '[S]earch', mode = { 'n', 'v' } },
       { '<leader>t', group = '[T]oggle' },
       { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } }, -- Enable gitsigns recommended keymaps first
+      { '<leader>m', group = '[M]ulticursor', mode = { 'n', 'x' } },
       { 'gr', group = 'LSP Actions', mode = { 'n' } },
+      { 'gx', desc = 'Open under cursor', mode = { 'n' } },
+      { 'gri', desc = '[I]mplementation', mode = { 'n' } },
+      { 'grt', desc = '[T]ype definition', mode = { 'n' } },
+      { 'grx', desc = 'E[X]ecute codelen<LeftMouse>', mode = { 'n' } },
+      { 'grr', desc = '[R]eferences', mode = { 'n' } },
+      { 'gO', desc = 'D[O]cument symbols', mode = { 'n' } },
     },
   }
 
@@ -399,7 +478,6 @@ do
   -- Highlight todo, notes, etc in comments
   vim.pack.add { gh 'folke/todo-comments.nvim' }
   require('todo-comments').setup { signs = false }
-
   -- [[ mini.nvim ]]
   --  A collection of various small independent plugins/modules
   vim.pack.add { gh 'nvim-mini/mini.nvim' }
@@ -424,7 +502,8 @@ do
   -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
   -- - sd'   - [S]urround [D]elete [']quotes
   -- - sr)'  - [S]urround [R]eplace [)] [']
-  require('mini.surround').setup()
+  -- require('mini.surround').setup()
+  require('mini.sessions').setup { autoread = true }
 
   -- Simple and easy statusline.
   --  You could remove this setup call if you don't like it,
@@ -441,6 +520,12 @@ do
 
   -- ... and there is more!
   --  Check out: https://github.com/nvim-mini/mini.nvim
+  require('mini.move').setup {}
+  require('mini.align').setup {}
+  require('mini.misc').setup {}
+  require('mini.jump').setup {}
+  MiniMisc.setup_auto_root()
+  MiniMisc.setup_restore_cursor()
 end
 
 -- ============================================================
@@ -448,135 +533,224 @@ end
 -- Telescope setup, keymaps, LSP picker mappings
 -- ============================================================
 do
-  -- [[ Fuzzy Finder (files, lsp, etc) ]]
-  --
-  -- Telescope is a fuzzy finder that comes with a lot of different things that
-  -- it can fuzzy find! It's more than just a "file finder", it can search
-  -- many different aspects of Neovim, your workspace, LSP, and more!
-  --
-  -- There are lots of other alternative pickers (like snacks.picker, or fzf-lua)
-  -- so feel free to experiment and see what you like!
-  --
-  -- The easiest way to use Telescope, is to start by doing something like:
-  --  :Telescope help_tags
-  --
-  -- After running this command, a window will open up and you're able to
-  -- type in the prompt window. You'll see a list of `help_tags` options and
-  -- a corresponding preview of the help.
-  --
-  -- Two important keymaps to use while in Telescope are:
-  --  - Insert mode: <c-/>
-  --  - Normal mode: ?
-  --
-  -- This opens a window that shows you all of the keymaps for the current
-  -- Telescope picker. This is really useful to discover what Telescope can
-  -- do as well as how to actually do it!
-
-  ---@type (string|vim.pack.Spec)[]
-  local telescope_plugins = {
-    gh 'nvim-lua/plenary.nvim',
-    gh 'nvim-telescope/telescope.nvim',
-    gh 'nvim-telescope/telescope-ui-select.nvim',
-  }
-  if vim.fn.executable 'make' == 1 then table.insert(telescope_plugins, gh 'nvim-telescope/telescope-fzf-native.nvim') end
-
-  -- NOTE: You can install multiple plugins at once
-  vim.pack.add(telescope_plugins)
-
-  -- See `:help telescope` and `:help telescope.setup()`
-  require('telescope').setup {
-    -- You can put your default mappings / updates / etc. in here
-    --  All the info you're looking for is in `:help telescope.setup()`
-    --
-    -- defaults = {
-    --   mappings = {
-    --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-    --   },
-    -- },
-    -- pickers = {}
-    extensions = {
-      ['ui-select'] = { require('telescope.themes').get_dropdown() },
+  vim.pack.add { gh 'folke/snacks.nvim' }
+  require('snacks').setup {
+    picker = {
+      matcher = { cwd_bonus = true, frecency = true, history_bonus = true },
+      layout = { preset = 'vertical', layout = { width = 0.9, height = 0.9 } },
+      sources = {
+        explorer = {
+          layout = { layout = { width = 0.25 } },
+        },
+      },
     },
+    lazygit = {},
+    indent = { animate = { enabled = false } },
+    explorer = {},
+    terminal = {},
+    scratch = {},
   }
 
-  -- Enable Telescope extensions if they are installed
-  pcall(require('telescope').load_extension, 'fzf')
-  pcall(require('telescope').load_extension, 'ui-select')
-
-  -- See `:help telescope.builtin`
-  local builtin = require 'telescope.builtin'
-  vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
-  vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-  vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
-  vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
-  vim.keymap.set({ 'n', 'v' }, '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
-  vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
-  vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
-  vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
-  vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-  vim.keymap.set('n', '<leader>sc', builtin.commands, { desc = '[S]earch [C]ommands' })
-  vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
-
-  -- Add Telescope-based LSP pickers when an LSP attaches to a buffer.
-  -- If you later switch picker plugins, this is where to update these mappings.
-  vim.api.nvim_create_autocmd('LspAttach', {
-    group = vim.api.nvim_create_augroup('telescope-lsp-attach', { clear = true }),
-    callback = function(event)
-      local buf = event.buf
-
-      -- Find references for the word under your cursor.
-      vim.keymap.set('n', 'grr', builtin.lsp_references, { buffer = buf, desc = '[G]oto [R]eferences' })
-
-      -- Jump to the implementation of the word under your cursor.
-      -- Useful when your language has ways of declaring types without an actual implementation.
-      vim.keymap.set('n', 'gri', builtin.lsp_implementations, { buffer = buf, desc = '[G]oto [I]mplementation' })
-
-      -- Jump to the definition of the word under your cursor.
-      -- This is where a variable was first declared, or where a function is defined, etc.
-      -- To jump back, press <C-t>.
-      vim.keymap.set('n', 'grd', builtin.lsp_definitions, { buffer = buf, desc = '[G]oto [D]efinition' })
-
-      -- Fuzzy find all the symbols in your current document.
-      -- Symbols are things like variables, functions, types, etc.
-      vim.keymap.set('n', 'gO', builtin.lsp_document_symbols, { buffer = buf, desc = 'Open Document Symbols' })
-
-      -- Fuzzy find all the symbols in your current workspace.
-      -- Similar to document symbols, except searches over your entire project.
-      vim.keymap.set('n', 'gW', builtin.lsp_dynamic_workspace_symbols, { buffer = buf, desc = 'Open Workspace Symbols' })
-
-      -- Jump to the type of the word under your cursor.
-      -- Useful when you're not sure what type a variable is and you want to see
-      -- the definition of its *type*, not where it was *defined*.
-      vim.keymap.set('n', 'grt', builtin.lsp_type_definitions, { buffer = buf, desc = '[G]oto [T]ype Definition' })
+  vim.api.nvim_create_autocmd('User', {
+    pattern = 'VeryLazy',
+    callback = function()
+      Snacks.toggle.option('spell', { name = 'Spelling' }):map '<leader>us'
+      Snacks.toggle.option('wrap', { name = 'Wrap' }):map '<leader>uw'
+      Snacks.toggle.option('relativenumber', { name = 'Relative Number' }):map '<leader>uL'
+      Snacks.toggle.diagnostics():map '<leader>ud'
+      Snacks.toggle.line_number():map '<leader>ul'
+      Snacks.toggle.option('conceallevel', { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2, name = 'Conceal Level' }):map '<leader>uc'
+      Snacks.toggle.option('showtabline', { off = 0, on = vim.o.showtabline > 0 and vim.o.showtabline or 2, name = 'Tabline' }):map '<leader>uA'
+      Snacks.toggle.treesitter():map '<leader>uT'
+      Snacks.toggle.option('background', { off = 'light', on = 'dark', name = 'Dark Background' }):map '<leader>ub'
+      Snacks.toggle.dim():map '<leader>uD'
+      Snacks.toggle.animate():map '<leader>ua'
+      Snacks.toggle.indent():map '<leader>ug'
+      Snacks.toggle.scroll():map '<leader>uS'
+      Snacks.toggle.profiler():map '<leader>dpp'
+      Snacks.toggle.profiler_highlights():map '<leader>dph'
+      Snacks.toggle.zoom():map('<leader>wm'):map '<leader>uZ'
+      Snacks.toggle.zen():map '<leader>uz'
     end,
   })
+  local keys = {
+    { '\\', function() Snacks.explorer() end, desc = '[\\]Explorer' },
+    { '<leader>sh', function() Snacks.picker.help() end, desc = '[S]earch [H]elp' },
+    { '<leader>sk', function() Snacks.picker.keymaps() end, desc = '[S]earch [K]eymaps' },
+    { '<leader>sc', function() Snacks.picker.commands() end, desc = '[S]earch [C]ommands' },
+    { '<leader>sb', function() Snacks.picker.buffers() end, desc = '[S]earch [B]uffers' },
+    { '<leader>ss', function() Snacks.picker.pickers() end, desc = '[S]earch [S]elect Snacks' },
+    { '<leader>sw', function() Snacks.picker.grep_word() end, desc = '[S]earch current [W]ord', mode = { 'n', 'x' } },
+    { '<leader>g', function() Snacks.picker.grep() end, desc = 'Search by [G]rep' },
+    { '<leader>sd', function() Snacks.picker.diagnostics() end, desc = '[S]earch [D]iagnostics' },
+    { '<leader>sr', function() Snacks.picker.resume() end, desc = '[S]earch [R]esume' },
+    { '<leader>s.', function() Snacks.picker.recent() end, desc = '[S]earch Recent Files ("." for repeat)' },
+    { '<leader><leader>', function() Snacks.picker.smart() end, desc = '[ ] Find existing buffers' },
+    { '<leader>/', function() Snacks.picker.lines {} end, desc = '[/] Fuzzily search in current buffer' },
+    { '<leader>s/', function() Snacks.picker.grep_buffers() end, desc = '[S]earch [/] in Open Files' },
+    { '<leader>sn', function() Snacks.picker.files { cwd = vim.fn.stdpath 'config' } end, desc = '[S]earch [N]eovim files' },
+    { '<leader>sj', function() Snacks.picker.jumps() end, desc = '[S]earch [J]umps' },
+    {
+      '<leader>p',
+      function()
+        if check_windows() then
+          Snacks.picker.projects { dev = { 'C:/Code' } }
+        else
+          Snacks.picker.projects { dev = { '~/Work', '~/C' } }
+        end
+      end,
+      desc = '[P]rojects',
+    },
+    { '<leader>l', function() Snacks.lazygit() end, desc = 'Open [L]azygit' },
+    { '<leader>tt', function() Snacks.terminal.toggle() end, desc = 'Toggle [T]erminal' },
+    { '<leader>.', function() Snacks.scratch() end, desc = 'Toggle Scratch Buffer' },
+    { '<leader>S', function() Snacks.scratch.select() end, desc = 'Select Scratch Buffer' },
+    { '<leader>d', function() Snacks.picker.todo_comments() end, desc = 'To[D]o' },
+  }
+  for _, map in ipairs(keys) do
+    local opts = { desc = map.desc }
+    if map.silent ~= nil then opts.silent = map.silent end
+    if map.noremap ~= nil then
+      opts.noremap = map.noremap
+    else
+      opts.noremap = true
+    end
+    if map.expr ~= nil then opts.expr = map.expr end
 
-  -- Override default behavior and theme when searching
-  vim.keymap.set('n', '<leader>/', function()
-    -- You can pass additional configuration to Telescope to change the theme, layout, etc.
-    builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-      winblend = 10,
-      previewer = false,
-    })
-  end, { desc = '[/] Fuzzily search in current buffer' })
-
-  -- It's also possible to pass additional configuration options.
-  --  See `:help telescope.builtin.live_grep()` for information about particular keys
-  vim.keymap.set(
-    'n',
-    '<leader>s/',
-    function()
-      builtin.live_grep {
-        grep_open_files = true,
-        prompt_title = 'Live Grep in Open Files',
-      }
-    end,
-    { desc = '[S]earch [/] in Open Files' }
-  )
-
-  -- Shortcut for searching your Neovim configuration files
-  vim.keymap.set('n', '<leader>sn', function() builtin.find_files { cwd = vim.fn.stdpath 'config' } end, { desc = '[S]earch [N]eovim files' })
+    local mode = map.mode or 'n'
+    vim.keymap.set(mode, map[1], map[2], opts)
+  end
 end
+-- do
+--   -- [[ Fuzzy Finder (files, lsp, etc) ]]
+--   --
+--   -- Telescope is a fuzzy finder that comes with a lot of different things that
+--   -- it can fuzzy find! It's more than just a "file finder", it can search
+--   -- many different aspects of Neovim, your workspace, LSP, and more!
+--   --
+--   -- There are lots of other alternative pickers (like snacks.picker, or fzf-lua)
+--   -- so feel free to experiment and see what you like!
+--   --
+--   -- The easiest way to use Telescope, is to start by doing something like:
+--   --  :Telescope help_tags
+--   --
+--   -- After running this command, a window will open up and you're able to
+--   -- type in the prompt window. You'll see a list of `help_tags` options and
+--   -- a corresponding preview of the help.
+--   --
+--   -- Two important keymaps to use while in Telescope are:
+--   --  - Insert mode: <c-/>
+--   --  - Normal mode: ?
+--   --
+--   -- This opens a window that shows you all of the keymaps for the current
+--   -- Telescope picker. This is really useful to discover what Telescope can
+--   -- do as well as how to actually do it!
+--
+--   ---@type (string|vim.pack.Spec)[]
+--   local telescope_plugins = {
+--     gh 'nvim-lua/plenary.nvim',
+--     gh 'nvim-telescope/telescope.nvim',
+--     gh 'nvim-telescope/telescope-ui-select.nvim',
+--   }
+--   if vim.fn.executable 'make' == 1 then table.insert(telescope_plugins, gh 'nvim-telescope/telescope-fzf-native.nvim') end
+--
+--   -- NOTE: You can install multiple plugins at once
+--   vim.pack.add(telescope_plugins)
+--
+--   -- See `:help telescope` and `:help telescope.setup()`
+--   require('telescope').setup {
+--     -- You can put your default mappings / updates / etc. in here
+--     --  All the info you're looking for is in `:help telescope.setup()`
+--     --
+--     -- defaults = {
+--     --   mappings = {
+--     --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
+--     --   },
+--     -- },
+--     -- pickers = {}
+--     extensions = {
+--       ['ui-select'] = { require('telescope.themes').get_dropdown() },
+--     },
+--   }
+--
+--   -- Enable Telescope extensions if they are installed
+--   pcall(require('telescope').load_extension, 'fzf')
+--   pcall(require('telescope').load_extension, 'ui-select')
+--
+--   -- See `:help telescope.builtin`
+--   local builtin = require 'telescope.builtin'
+--   vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
+--   vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
+--   vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
+--   vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
+--   vim.keymap.set({ 'n', 'v' }, '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
+--   vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
+--   vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
+--   vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
+--   vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
+--   vim.keymap.set('n', '<leader>sc', builtin.commands, { desc = '[S]earch [C]ommands' })
+--   vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+--
+--   -- Add Telescope-based LSP pickers when an LSP attaches to a buffer.
+--   -- If you later switch picker plugins, this is where to update these mappings.
+--   vim.api.nvim_create_autocmd('LspAttach', {
+--     group = vim.api.nvim_create_augroup('telescope-lsp-attach', { clear = true }),
+--     callback = function(event)
+--       local buf = event.buf
+--
+--       -- Find references for the word under your cursor.
+--       vim.keymap.set('n', 'grr', builtin.lsp_references, { buffer = buf, desc = '[G]oto [R]eferences' })
+--
+--       -- Jump to the implementation of the word under your cursor.
+--       -- Useful when your language has ways of declaring types without an actual implementation.
+--       vim.keymap.set('n', 'gri', builtin.lsp_implementations, { buffer = buf, desc = '[G]oto [I]mplementation' })
+--
+--       -- Jump to the definition of the word under your cursor.
+--       -- This is where a variable was first declared, or where a function is defined, etc.
+--       -- To jump back, press <C-t>.
+--       vim.keymap.set('n', 'grd', builtin.lsp_definitions, { buffer = buf, desc = '[G]oto [D]efinition' })
+--
+--       -- Fuzzy find all the symbols in your current document.
+--       -- Symbols are things like variables, functions, types, etc.
+--       vim.keymap.set('n', 'gO', builtin.lsp_document_symbols, { buffer = buf, desc = 'Open Document Symbols' })
+--
+--       -- Fuzzy find all the symbols in your current workspace.
+--       -- Similar to document symbols, except searches over your entire project.
+--       vim.keymap.set('n', 'gW', builtin.lsp_dynamic_workspace_symbols, { buffer = buf, desc = 'Open Workspace Symbols' })
+--
+--       -- Jump to the type of the word under your cursor.
+--       -- Useful when you're not sure what type a variable is and you want to see
+--       -- the definition of its *type*, not where it was *defined*.
+--       vim.keymap.set('n', 'grt', builtin.lsp_type_definitions, { buffer = buf, desc = '[G]oto [T]ype Definition' })
+--     end,
+--   })
+--
+--   -- Override default behavior and theme when searching
+--   vim.keymap.set('n', '<leader>/', function()
+--     -- You can pass additional configuration to Telescope to change the theme, layout, etc.
+--     builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
+--       winblend = 10,
+--       previewer = false,
+--     })
+--   end, { desc = '[/] Fuzzily search in current buffer' })
+--
+--   -- It's also possible to pass additional configuration options.
+--   --  See `:help telescope.builtin.live_grep()` for information about particular keys
+--   vim.keymap.set(
+--     'n',
+--     '<leader>s/',
+--     function()
+--       builtin.live_grep {
+--         grep_open_files = true,
+--         prompt_title = 'Live Grep in Open Files',
+--       }
+--     end,
+--     { desc = '[S]earch [/] in Open Files' }
+--   )
+--
+--   -- Shortcut for searching your Neovim configuration files
+--   vim.keymap.set('n', '<leader>sn', function() builtin.find_files { cwd = vim.fn.stdpath 'config' } end, { desc = '[S]earch [N]eovim files' })
+-- end
 
 -- ============================================================
 -- SECTION 5: LSP
@@ -632,15 +806,19 @@ do
 
       -- Rename the variable under your cursor.
       --  Most Language Servers support renaming across files, etc.
-      map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
+      map('grn', vim.lsp.buf.rename, 'Re[N]ame')
 
       -- Execute a code action, usually your cursor needs to be on top of an error
       -- or a suggestion from your LSP for this to activate.
-      map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
+      map('gra', vim.lsp.buf.code_action, 'Code [A]ction', { 'n', 'x' })
 
       -- WARN: This is not Goto Definition, this is Goto Declaration.
       --  For example, in C this would take you to the header.
-      map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+      map('grD', vim.lsp.buf.declaration, 'Goto [D]eclaration')
+      map('grd', vim.lsp.buf.definition, 'Goto [D]efinition')
+
+      map('gW', require('snacks').picker.lsp_workspace_symbols, 'Open [W]orkspace Symbols')
+      map('<leader>td', function() vim.diagnostic.enable(not vim.diagnostic.is_enabled()) end, '[T]oggle [D]iagnostics')
 
       -- The following two autocommands are used to highlight references of the
       -- word under your cursor when your cursor rests there for a little while.
@@ -686,10 +864,41 @@ do
   --  See `:help lsp-config` for information about keys and how to configure
   ---@type table<string, vim.lsp.Config>
   local servers = {
-    -- clangd = {},
+    clangd = {
+      capabilities = {
+        textDocument = {
+          semanticHighlightingCapabilities = {
+            semanticHighlighting = true,
+          },
+        },
+      },
+    },
+    ruff = {},
+    hls = {
+      settings = {
+        haskell = {
+          formattingProvider = 'fourmolu',
+          plugin = {
+            semanticTokens = {
+              globalOn = true,
+            },
+          },
+        },
+      },
+    },
     -- gopls = {},
     -- pyright = {},
-    -- rust_analyzer = {},
+    basedpyright = {
+      settings = {
+        basedpyright = {
+          analysis = {
+            typeCheckingMode = 'off',
+          },
+        },
+      },
+    },
+    rust_analyzer = {},
+    tinymist = {},
     --
     -- Some languages (like typescript) have entire language plugins that can be useful:
     --    https://github.com/pmizio/typescript-tools.nvim
@@ -733,6 +942,14 @@ do
       },
     },
   }
+  local other_servers = {
+    ols = {
+      settings = {
+        checker_args = '-vet -strict-style',
+      },
+    },
+    uiua = {},
+  }
 
   vim.pack.add {
     gh 'neovim/nvim-lspconfig',
@@ -758,7 +975,7 @@ do
 
   require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-  for name, server in pairs(servers) do
+  for name, server in pairs(vim.tbl_extend('keep', servers, other_servers)) do
     vim.lsp.config(name, server)
     vim.lsp.enable(name)
   end
@@ -776,7 +993,9 @@ do
     format_on_save = function(bufnr)
       -- You can specify filetypes to autoformat on save here:
       local enabled_filetypes = {
-        -- lua = true,
+        lua = true,
+        haskell = true,
+        odin = true,
         -- python = true,
       }
       if enabled_filetypes[vim.bo[bufnr].filetype] then
@@ -790,6 +1009,9 @@ do
     },
     -- You can also specify external formatters in here.
     formatters_by_ft = {
+      lua = { 'stylua' },
+      haskell = { 'fourmolu' },
+      odin = { 'odinfmt' },
       -- rust = { 'rustfmt' },
       -- Conform can also run multiple formatters sequentially
       -- python = { "isort", "black" },
@@ -799,7 +1021,7 @@ do
     },
   }
 
-  vim.keymap.set({ 'n', 'v' }, '<leader>f', function() require('conform').format { async = true } end, { desc = '[F]ormat buffer' })
+  vim.keymap.set({ 'n', 'v' }, '<leader>f', function() require('conform').format { async = true, lsp_format = 'fallback' } end, { desc = '[F]ormat buffer' })
 end
 
 -- ============================================================
@@ -846,7 +1068,23 @@ do
       -- <c-k>: Toggle signature help
       --
       -- See `:help blink-cmp-config-keymap` for defining your own keymap
-      preset = 'default',
+      preset = 'none',
+      ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
+      ['<C-e>'] = { 'hide', 'fallback' },
+      ['<C-y>'] = { 'select_and_accept', 'fallback' },
+
+      ['<Up>'] = { 'select_prev', 'fallback' },
+      ['<Down>'] = { 'select_next', 'fallback' },
+      ['<C-p>'] = { 'select_prev', 'fallback_to_mappings' },
+      ['<C-n>'] = { 'select_next', 'fallback_to_mappings' },
+
+      ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
+      ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
+
+      ['<C-l>'] = { 'snippet_forward', 'fallback' },
+      ['<C-h>'] = { 'snippet_backward', 'fallback' },
+
+      ['<C-k>'] = { 'show_signature', 'hide_signature', 'fallback' },
 
       -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
       --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -944,6 +1182,9 @@ do
       end
     end,
   })
+
+  vim.pack.add { { src = gh 'nvim-treesitter/nvim-treesitter-context' } }
+  require('treesitter-context').setup { enable = true }
 end
 
 -- ============================================================
@@ -962,10 +1203,10 @@ do
   --
   -- require 'kickstart.plugins.debug'
   -- require 'kickstart.plugins.indent_line'
-  -- require 'kickstart.plugins.lint'
-  -- require 'kickstart.plugins.autopairs'
+  require 'kickstart.plugins.lint'
+  require 'kickstart.plugins.autopairs'
   -- require 'kickstart.plugins.neo-tree'
-  -- require 'kickstart.plugins.gitsigns' -- adds gitsigns recommended keymaps
+  require 'kickstart.plugins.gitsigns' -- adds gitsigns recommended keymaps
 
   -- NOTE: You can add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --
@@ -973,5 +1214,101 @@ do
   -- require 'custom.plugins'
 end
 
+-- ============================================================
+-- SECTION 10: MY SHIT
+-- ============================================================
+do
+  vim.pack.add { { src = gh 'jake-stewart/multicursor.nvim' } }
+  local mc = require 'multicursor-nvim'
+  mc.setup()
+
+  local set = vim.keymap.set
+
+  -- Add or skip cursor above/below the main cursor.
+  set({ 'n', 'x' }, '<C-Up>', function() mc.lineAddCursor(-1) end, { desc = 'Add cursor UP' })
+  set({ 'n', 'x' }, '<C-Down>', function() mc.lineAddCursor(1) end, { desc = 'Add cursor DOWN' })
+  set({ 'n', 'x' }, '<C-S-Up>', function() mc.lineSkipCursor(-1) end, { desc = 'Skip cursor UP' })
+  set({ 'n', 'x' }, '<C-S-Down>', function() mc.lineSkipCursor(1) end, { desc = 'Skip cursor DOWN' })
+  -- Add or skip adding a new cursor by matching word/selection
+  set({ 'n', 'x' }, '<C-Right>', function() mc.matchAddCursor(1) end, { desc = 'Match add cursor DOWN' })
+  set({ 'n', 'x' }, '<C-S-Right>', function() mc.matchSkipCursor(1) end, { desc = 'Match skip cursor DOWN' })
+  set({ 'n', 'x' }, '<C-Left>', function() mc.matchAddCursor(-1) end, { desc = 'Match add cursor UP' })
+  set({ 'n', 'x' }, '<C-S-Left>', function() mc.matchSkipCursor(-1) end, { desc = 'Match skip cursor UP' })
+
+  -- Add and remove cursors with control + left click.
+  set('n', '<m-leftmouse>', mc.handleMouse)
+  set('n', '<m-leftdrag>', mc.handleMouseDrag)
+  set('n', '<m-leftrelease>', mc.handleMouseRelease)
+
+  -- Disable and enable cursors.
+  set({ 'n', 'x' }, '<c-q>', mc.toggleCursor)
+
+  -- Add a cursor for all matches of cursor word/selection in the document.
+
+  set({ 'n', 'x' }, '<leader>A', mc.matchAllAddCursors, { desc = 'Add cursors' })
+
+  -- Pressing `<leader>miwap` will create a cursor in every match of the
+  -- string captured by `iw` inside range `ap`.
+  -- This action is highly customizable, see `:h multicursor-operator`.
+  set({ 'n', 'x' }, '<leader>m', mc.operator)
+
+  -- Mappings defined in a keymap layer only apply when there are
+  -- multiple cursors. This lets you have overlapping mappings.
+  mc.addKeymapLayer(function(layerSet)
+    -- Select a different cursor as the main one.
+    layerSet({ 'n', 'x' }, '<left>', mc.prevCursor)
+    layerSet({ 'n', 'x' }, '<right>', mc.nextCursor)
+
+    -- Delete the main cursor.
+    layerSet({ 'n', 'x' }, '<leader>x', mc.deleteCursor, { desc = 'Delete cursor' })
+
+    -- Enable and clear cursors using escape.
+    layerSet('n', '<esc>', function()
+      if not mc.cursorsEnabled() then
+        mc.enableCursors()
+      else
+        mc.clearCursors()
+      end
+    end)
+  end)
+
+  -- Customize how cursors look.
+  local hl = vim.api.nvim_set_hl
+  hl(0, 'MultiCursorCursor', { link = 'Cursor' })
+  hl(0, 'MultiCursorVisual', { link = 'Visual' })
+  hl(0, 'MultiCursorSign', { link = 'SignColumn' })
+  hl(0, 'MultiCursorMatchPreview', { link = 'Search' })
+  hl(0, 'MultiCursorDisabledCursor', { link = 'Visual' })
+  hl(0, 'MultiCursorDisabledVisual', { link = 'Visual' })
+  hl(0, 'MultiCursorDisabledSign', { link = 'SignColumn' })
+
+  vim.pack.add { { src = gh 'lervag/vimtex' } }
+  vim.g.vimtex_view_method = 'sioyek'
+
+  vim.pack.add { { src = gh 'HiPhish/rainbow-delimiters.nvim' } }
+  require('rainbow-delimiters.setup').setup {
+    strategy = {
+      [''] = function(bufnr)
+        -- Disabled for very large files, global strategy for large files,
+        -- local strategy otherwise
+        local line_count = vim.api.nvim_buf_line_count(bufnr)
+        if line_count > 10000 then
+          return nil
+        elseif line_count > 1000 then
+          return 'rainbow-delimiters.strategy.global'
+        end
+        return 'rainbow-delimiters.strategy.local'
+      end,
+    },
+  }
+
+  vim.pack.add {
+    { src = gh 'MunifTanjim/nui.nvim' },
+    { src = gh 'esmuellert/codediff.nvim' },
+    { src = gh 'NeogitOrg/neogit' },
+    { src = gh 'Apeiros-46B/uiua.vim' },
+  }
+  set({ 'n', 'x' }, '<leader>n', '<cmd>Neogit<cr>', { desc = 'Show Neogit UI' })
+end
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
