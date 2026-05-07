@@ -100,7 +100,7 @@ do
   vim.g.maplocalleader = ' '
 
   -- Set to true if you have a Nerd Font installed and selected in the terminal
-  vim.g.have_nerd_font = false
+  vim.g.have_nerd_font = true
   vim.g.c_syntax_for_h = true
 
   -- [[ Setting options ]]
@@ -315,6 +315,7 @@ do
     callback = function() vim.api.nvim_set_hl(0, '@lsp.type.enumMember.haskell', { link = '@constructor' }) end,
   })
 
+  require('vim._core.ui2').enable { enable = true }
   vim.cmd.packadd 'nvim.undotree'
   require('subvert').setup {}
 end
