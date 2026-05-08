@@ -368,11 +368,6 @@ do
       local kind = ev.data.kind
       if kind ~= 'install' and kind ~= 'update' then return end
 
-      if name == 'telescope-fzf-native.nvim' and vim.fn.executable 'make' == 1 then
-        run_build(name, { 'make' }, ev.data.path)
-        return
-      end
-
       if name == 'LuaSnip' then
         if vim.fn.has 'win32' ~= 1 and vim.fn.executable 'make' == 1 then run_build(name, { 'make', 'install_jsregexp' }, ev.data.path) end
         return
@@ -479,6 +474,7 @@ do
   vim.cmd.colorscheme 'tokyonight-night'
 
   -- Highlight todo, notes, etc in comments
+  vim.pack.add { gh 'nvim-lua/plenary.nvim' }
   vim.pack.add { gh 'folke/todo-comments.nvim' }
   require('todo-comments').setup { signs = false }
   -- [[ mini.nvim ]]
