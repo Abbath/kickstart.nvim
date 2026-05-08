@@ -543,7 +543,6 @@ do
         },
       },
     },
-    lazygit = {},
     indent = { animate = { enabled = false } },
     explorer = {},
     terminal = {},
@@ -600,7 +599,6 @@ do
       end,
       desc = '[P]rojects',
     },
-    { '<leader>l', function() Snacks.lazygit() end, desc = 'Open [L]azygit' },
     { '<leader>tt', function() Snacks.terminal.toggle() end, desc = 'Toggle [T]erminal' },
     { '<leader>.', function() Snacks.scratch() end, desc = 'Toggle Scratch Buffer' },
     { '<leader>S', function() Snacks.scratch.select() end, desc = 'Select Scratch Buffer' },
@@ -923,8 +921,8 @@ do
   --    See the README about individual language/framework/plugin snippets:
   --    https://github.com/rafamadriz/friendly-snippets
   --
-  -- vim.pack.add { gh 'rafamadriz/friendly-snippets' }
-  -- require('luasnip.loaders.from_vscode').lazy_load()
+  vim.pack.add { gh 'rafamadriz/friendly-snippets' }
+  require('luasnip.loaders.from_vscode').lazy_load()
 
   -- [[ Autocomplete Engine ]]
   vim.pack.add { { src = gh 'saghen/blink.cmp', version = vim.version.range '1.*' } }
@@ -1168,6 +1166,13 @@ do
 
   vim.pack.add { { src = gh 'lervag/vimtex' } }
   vim.g.vimtex_view_method = 'sioyek'
+  if check_windows() then
+    vim.g.vimtex_compiler_method = 'latexmk'
+    vim.g.vimtex_compiler_latexmk = {
+      out_dir = 'build',
+      options = { '-pdf', '-interaction=nonstopmode', '-synctex=1' },
+    }
+  end
 
   vim.pack.add { { src = gh 'HiPhish/rainbow-delimiters.nvim' } }
   require('rainbow-delimiters.setup').setup {
