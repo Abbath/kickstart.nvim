@@ -766,6 +766,7 @@ do
     },
     rust_analyzer = {},
     tinymist = {},
+    texlab = {},
     --
     -- Some languages (like typescript) have entire language plugins that can be useful:
     --    https://github.com/pmizio/typescript-tools.nvim
@@ -1048,7 +1049,7 @@ do
       local line_count = vim.api.nvim_buf_line_count(buf)
       if line_count > 10000 then return end
       local language = vim.treesitter.language.get_lang(filetype)
-      if not language then return end
+      if not language or language == 'latex' then return end
 
       local installed_parsers = require('nvim-treesitter').get_installed 'parsers'
 
