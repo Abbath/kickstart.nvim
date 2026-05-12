@@ -1168,13 +1168,11 @@ do
 
   vim.pack.add { { src = gh 'lervag/vimtex' } }
   vim.g.vimtex_view_method = 'sioyek'
-  if check_windows() then
-    vim.g.vimtex_compiler_method = 'latexmk'
-    vim.g.vimtex_compiler_latexmk = {
-      out_dir = 'build',
-      options = { '-pdf', '-interaction=nonstopmode', '-synctex=1' },
-    }
-  end
+  vim.g.vimtex_compiler_method = 'latexmk'
+  vim.g.vimtex_compiler_latexmk = {
+    out_dir = 'build',
+    options = { '-pdf', '-interaction=nonstopmode', '-synctex=1' },
+  }
 
   vim.pack.add { { src = gh 'HiPhish/rainbow-delimiters.nvim' } }
   require('rainbow-delimiters.setup').setup {
