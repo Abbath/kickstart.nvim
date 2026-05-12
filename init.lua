@@ -685,6 +685,7 @@ do
       map('grd', vim.lsp.buf.definition, 'Goto [D]efinition')
 
       map('gW', require('snacks').picker.lsp_workspace_symbols, 'Open [W]orkspace Symbols')
+      map('gO', require('snacks').picker.lsp_symbols, '[O]pen Symbols')
       map('<leader>td', function() vim.diagnostic.enable(not vim.diagnostic.is_enabled()) end, '[T]oggle [D]iagnostics')
 
       -- The following two autocommands are used to highlight references of the
