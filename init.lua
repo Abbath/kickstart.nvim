@@ -159,6 +159,7 @@ do
 
   -- Decrease mapped sequence wait time
   vim.o.timeoutlen = 300
+  vim.o.ttimeoutlen = 10
 
   -- Configure how new splits should be opened
   vim.o.splitright = true
@@ -203,13 +204,22 @@ do
   vim.o.virtualedit = 'block'
   vim.api.nvim_command [[aunmenu PopUp.How-to\ disable\ mouse]]
 
+  -- if check_windows() then
+  --   vim.o.shelltemp = false
+  --   vim.o.shell = 'pwsh'
+  --   vim.o.shellcmdflag =
+  --     "-NoLogo -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;$PSStyle.Formatting.Error = '';$PSStyle.Formatting.ErrorAccent = '';$PSStyle.Formatting.Warning = '';$PSStyle.OutputRendering = 'PlainText';"
+  --   vim.o.shellredir = '2>&1 | %%{ "$_" } | Out-File %s; exit $LastExitCode'
+  --   vim.o.shellpipe = '2>&1 | %%{ "$_" } | Out-File %s; exit $LastExitCode'
+  --   vim.o.shellquote = ''
+  --   vim.o.shellxquote = ''
+  -- end
   if check_windows() then
     vim.o.shelltemp = false
-    vim.o.shell = 'pwsh'
-    vim.o.shellcmdflag =
-      "-NoLogo -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;$PSStyle.Formatting.Error = '';$PSStyle.Formatting.ErrorAccent = '';$PSStyle.Formatting.Warning = '';$PSStyle.OutputRendering = 'PlainText';"
-    vim.o.shellredir = '2>&1 | %%{ "$_" } | Out-File %s; exit $LastExitCode'
-    vim.o.shellpipe = '2>&1 | %%{ "$_" } | Out-File %s; exit $LastExitCode'
+    vim.o.shell = 'nu'
+    vim.o.shellcmdflag = '--stdin --no-newline -c'
+    vim.o.shellredir = 'out+err> %s'
+    vim.o.shellpipe = 'out+err> %s'
     vim.o.shellquote = ''
     vim.o.shellxquote = ''
   end
