@@ -419,13 +419,6 @@ do
   vim.pack.add { gh 'NMAC427/guess-indent.nvim' }
   require('guess-indent').setup {}
 
-  -- Because lua is a real programming language, you can also have some logic to your installation -
-  -- like only installing a plugin if a condition is met.
-  --
-  -- Here we only install `nvim-web-devicons` (which adds pretty icons) if we have a Nerd Font,
-  -- since otherwise the icons won't display properly.
-  if vim.g.have_nerd_font then vim.pack.add { gh 'nvim-tree/nvim-web-devicons' } end
-
   -- Here is a more advanced configuration example that passes options to `gitsigns.nvim`
   --
   -- See `:help gitsigns` to understand what each configuration key does.
@@ -533,6 +526,10 @@ do
   require('mini.align').setup {}
   require('mini.misc').setup {}
   require('mini.jump').setup {}
+  if vim.g.have_nerd_font then
+    require('mini.icons').setup {}
+    MiniIcons.mock_nvim_web_devicons()
+  end
   MiniMisc.setup_auto_root()
   MiniMisc.setup_restore_cursor()
 end
