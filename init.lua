@@ -532,6 +532,9 @@ do
   end
   MiniMisc.setup_auto_root()
   MiniMisc.setup_restore_cursor()
+
+  vim.pack.add { gh 'kylechui/nvim-surround' }
+  require('nvim-surround').setup {}
 end
 
 -- ============================================================
