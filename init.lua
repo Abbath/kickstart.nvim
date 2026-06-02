@@ -120,6 +120,8 @@ do
     vim.g.neovide_floating_corner_radius = 30
     vim.g.neovide_cursor_animate_in_insert_mode = true
     vim.g.neovide_cursor_smooth_blink = true
+    vim.g.neovide_pixel_geometry = 'RGBH'
+    vim.g.neovide_hide_mouse_when_typing = true
     vim.keymap.set('n', '<F11>', function() vim.g.neovide_fullscreen = not vim.g.neovide_fullscreen end)
   end
 
