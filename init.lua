@@ -753,6 +753,7 @@ do
         },
       },
     },
+    ty = {},
     ruff = {},
     hls = {
       settings = {
@@ -768,15 +769,15 @@ do
     },
     -- gopls = {},
     -- pyright = {},
-    basedpyright = {
-      settings = {
-        basedpyright = {
-          analysis = {
-            typeCheckingMode = 'off',
-          },
-        },
-      },
-    },
+    -- basedpyright = {
+    --   settings = {
+    --     basedpyright = {
+    --       analysis = {
+    --         typeCheckingMode = 'off',
+    --       },
+    --     },
+    --   },
+    -- },
     rust_analyzer = {},
     tinymist = {},
     texlab = {},
