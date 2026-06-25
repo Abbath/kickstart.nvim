@@ -47,7 +47,7 @@
       "src": "https://github.com/mason-org/mason.nvim"
     },
     "mini.nvim": {
-      "rev": "c594be5b095204e99473825ec2dee872e7409a4d",
+      "rev": "c248713d3530710f67ec804cfbdfcd5b02b19dee",
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "multicursor.nvim": {
@@ -112,7 +112,7 @@
       "src": "https://github.com/Apeiros-46B/uiua.vim"
     },
     "vimtex": {
-      "rev": "63745fa542346e0f09a496d440645ef6ff75b62c",
+      "rev": "9388638aec092cceab6ac20dc08541f4e429e8ce",
       "src": "https://github.com/lervag/vimtex"
     },
     "which-key.nvim": {
