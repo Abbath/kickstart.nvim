@@ -100,6 +100,7 @@ do
   vim.g.mapleader = ' '
   vim.g.maplocalleader = ' '
 
+  vim.go.tabclose = 'left'
   -- Set to true if you have a Nerd Font installed and selected in the terminal
   vim.g.have_nerd_font = true
   vim.g.c_syntax_for_h = true
@@ -753,8 +754,8 @@ do
         },
       },
     },
-    ty = {},
-    -- zuban = {},
+    -- ty = {},
+    zuban = {},
     ruff = {},
     hls = {
       settings = {
