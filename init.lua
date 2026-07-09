@@ -1208,12 +1208,9 @@ do
     { src = gh 'esmuellert/codediff.nvim' },
     { src = gh 'NeogitOrg/neogit' },
     { src = gh 'Apeiros-46B/uiua.vim' },
-    { src = gh 'mhanberg/output-panel.nvim' },
   }
-  require('output_panel').setup {}
   require('neogit').setup { sections = { untracked = { hidden = false, folded = true } } }
   set({ 'n', 'x' }, '<leader>n', '<cmd>Neogit<cr>', { desc = 'Show Neogit UI' })
-  set({ 'n', 'x' }, '<leader>o', '<cmd>OutputPanel<cr>', { desc = 'LSP Output Panel' })
 end
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
