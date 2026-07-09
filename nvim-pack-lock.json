@@ -47,7 +47,7 @@
       "src": "https://github.com/mason-org/mason.nvim"
     },
     "mini.nvim": {
-      "rev": "c5cdbadeb423ff724e27a42ab2d1c504d1d6fc5a",
+      "rev": "928971c3cfe99ddf29659acc31214cfa836fabe4",
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "multicursor.nvim": {
@@ -55,7 +55,7 @@
       "src": "https://github.com/jake-stewart/multicursor.nvim"
     },
     "neogit": {
-      "rev": "43ea1a0854052e583f647e0b35879f0158a70a78",
+      "rev": "6fc2fa890bd2031ed999c074daab0fb4feff20a5",
       "src": "https://github.com/NeogitOrg/neogit"
     },
     "nui.nvim": {
@@ -71,7 +71,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-lspconfig": {
-      "rev": "292f44408498103c47996ff5c18fd366293840d8",
+      "rev": "d224a1920728ba129880efc700d4a0180ac4ecbb",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-surround": {
@@ -86,6 +86,10 @@
     "nvim-treesitter-context": {
       "rev": "b311b30818951d01f7b4bf650521b868b3fece16",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-context"
+    },
+    "output-panel.nvim": {
+      "rev": "bb388db46ff4a54169341d6d8477fcb8243d0c95",
+      "src": "https://github.com/mhanberg/output-panel.nvim"
     },
     "plenary.nvim": {
       "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",
@@ -112,7 +116,7 @@
       "src": "https://github.com/Apeiros-46B/uiua.vim"
     },
     "vimtex": {
-      "rev": "5e6a06f5cec5ede3dc6ba045ef6eda13b6dccb1f",
+      "rev": "a5949d2800c1866c878956d49c51fc8d003c6b99",
       "src": "https://github.com/lervag/vimtex"
     },
     "which-key.nvim": {
