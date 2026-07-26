@@ -227,6 +227,8 @@ do
     vim.o.shellxquote = ''
   end
 
+  vim.lsp.log.set_level 'trace'
+
   -- [[ Basic Keymaps ]]
   --  See `:help vim.keymap.set()`
 
@@ -859,7 +861,9 @@ do
 
   -- Automatically install LSPs and related tools to stdpath for Neovim
   require('mason').setup {}
-
+  require('mason-lspconfig').setup {
+    automatic_enable = false, -- Change this to true if you want to automatically enable servers that are installed manually (e.g. via :Mason / :MasonInstall)
+  }
   -- Ensure the servers and tools above are installed
   --
   -- To check the current status of installed tools and/or manually install
