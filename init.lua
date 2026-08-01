@@ -227,8 +227,6 @@ do
     vim.o.shellxquote = ''
   end
 
-  vim.lsp.log.set_level 'trace'
-
   -- [[ Basic Keymaps ]]
   --  See `:help vim.keymap.set()`
 
